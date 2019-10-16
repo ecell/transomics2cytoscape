@@ -1,0 +1,30 @@
+---
+title: "Transomics 2.5D visualization Notebook"
+output: html_notebook
+---
+
+# 1. Importing KEGG pathways with KEGGscape
+```{r}
+```
+
+
+```{r}
+library(RCy3)
+installApp('KEGGscape')
+```
+
+- Importing a kinase pathway
+
+```{r}
+library(httr)
+GET("http://localhost:1234/keggscape/v1/mmu04150")
+```
+
+- Importing a substrate pathway
+
+```{r}
+GET("http://localhost:1234/keggscape/v1/mmu03008")
+```
+
+# 2. Exporting, Replacing IDs, Combining pathways
+
