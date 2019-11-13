@@ -57,5 +57,8 @@ substrate_edge_table = getTableColumns('edge')
 substrate_node_table = getTableColumns('node')
 ```
 
+- Merging Networks
 
-- Replacing IDs
+
+
+
