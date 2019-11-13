@@ -41,22 +41,21 @@ networks = getNetworkList()
 
 ## 2.1 Getting Node and Edge tables
 
-- Setting current network
+- Setting current network to kinase layer, and getting node and edge tables
 
 ```{r}
-#setCurrentNetwork(networks[1]) # This fails. I reported it to https://github.com/cytoscape/RCy3/issues/76
-```
-
-- Getting edge tables
-
-```{r}
+setCurrentNetwork(networks[1]) # This works well from version 2.6.0 https://github.com/cytoscape/RCy3/issues/76
 kinase_edge_table = getTableColumns('edge')
+kinase_node_table = getTableColumns('node') # This works well from version 2.6.0 https://github.com/cytoscape/RCy3/issues/77
 ```
 
-- Getting node tables
+- Setting current network to substrate layer, and getting node and edge tables
 
 ```{r}
-# kinase_node_table = getTableColumns('node') # This fails. I reported it to https://github.com/cytoscape/RCy3/issues/77
+setCurrentNetwork(networks[2])
+substrate_edge_table = getTableColumns('edge')
+substrate_node_table = getTableColumns('node')
 ```
+
 
 - Replacing IDs
