@@ -56,4 +56,4 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
 }
 
 ## example
-#create3Dnetfile('rno00010.xml', 'rno00010.xml', 'rno04910.xml', 1, 500, 1000)
+#create3Dnetfile('rno00010', 'rno00010', 'rno04910', 1, 500, 1000)
