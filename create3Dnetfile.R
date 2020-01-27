@@ -26,3 +26,6 @@ create3Dnetfile <- function(kgml1, kgml2, kgml3, zheight1, zheight2, zheight3) {
   createNetworkFromDataFrames(nodes)
   exportNetwork('./transomics','cyjs')
 }
+
+## example
+#create3Dnetfile('rno00010.xml', 'rno00010.xml', 'rno04910.xml', 1, 500, 1000)
