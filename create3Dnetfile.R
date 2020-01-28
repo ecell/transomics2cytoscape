@@ -3,6 +3,7 @@ library(dplyr)
 library(KEGGREST)
 
 installApp('KEGGscape')
+installApp('Cy3D')
 
 create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2, zheight3) {
   writeLines(keggGet(pathwayID1, option = 'kgml'), paste(pathwayID1, '.xml', sep=''))
