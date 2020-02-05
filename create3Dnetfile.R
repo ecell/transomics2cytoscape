@@ -15,6 +15,12 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
   Sys.sleep(5)
   print(paste("Reading node table", pathwayID1))
   nodetable1 = getTableColumns()
+  
+  et1 = getTableColumns(table = "edge")
+  ei1 = getEdgeInfo(et1$SUID)
+  et1['source'] = unlist(lapply(ei1, function(x) x$source))
+  et1['target'] = unlist(lapply(ei1, function(x) x$target))
+
   KEGG_NODE_Z = rep(zheight1, dim(nodetable1)[1])
   nodetable1 = cbind(nodetable1, KEGG_NODE_Z)
   
@@ -23,6 +29,12 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
   Sys.sleep(5)
   print(paste("Reading node table", pathwayID2))
   nodetable2 = getTableColumns()
+  
+  et2 = getTableColumns(table = "edge")
+  ei2 = getEdgeInfo(et2$SUID)
+  et2['source'] = unlist(lapply(ei2, function(x) x$source))
+  et2['target'] = unlist(lapply(ei2, function(x) x$target))
+
   KEGG_NODE_Z = rep(zheight2, dim(nodetable2)[1])
   nodetable2 = cbind(nodetable2, KEGG_NODE_Z)
   
@@ -31,6 +43,12 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
   Sys.sleep(5)
   print(paste("Reading node table", pathwayID3))
   nodetable3 = getTableColumns()
+  
+  et3 = getTableColumns(table = "edge")
+  ei3 = getEdgeInfo(et3$SUID)
+  et3['source'] = unlist(lapply(ei3, function(x) x$source))
+  et3['target'] = unlist(lapply(ei3, function(x) x$target))
+
   KEGG_NODE_Z = rep(zheight3, dim(nodetable3)[1])
   nodetable3 = cbind(nodetable3, KEGG_NODE_Z)
   
@@ -38,13 +56,18 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
   nodetable3d = bind_rows(nodetable1, nodetable2, nodetable3)
   nodetable3d %>% rename(id=SUID) -> nodes
   nodes['id'] = as.character(nodes$id)
-  createNetworkFromDataFrames(nodes)
   
+  edges = bind_rows(et1, et2, et3)
+  edges['source'] = as.character(edges$source)
+  edges['target'] = as.character(edges$target)
+
+  createNetworkFromDataFrames(nodes, edges)
+
   download.file("https://raw.githubusercontent.com/ecell/cytoscape-styles/master/xml/transomics.xml", "transomics.xml")
   importVisualStyles(filename = "transomics.xml")
   setVisualStyle("transomics")
   print("Set visual style to 'transomics'")
-  
+
   exportNetwork(output,'cyjs')
   print(paste('Wrote ', output, '.cyjs in the current working directory.', sep=''))
   print("Please import it from Cytoscape Desktop and select 'Cy3D' from 'Network View Renderer' dropdown list.")
