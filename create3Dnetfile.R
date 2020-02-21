@@ -1,6 +1,5 @@
 library(RCy3)
 library(dplyr)
-#library(tibble)
 library(KEGGREST)
 
 installApp('KEGGscape')
@@ -94,7 +93,7 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
   
   createNetworkFromDataFrames(nodes, edges)
   
-  download.file("https://raw.githubusercontent.com/ecell/cytoscape-styles/master/xml/transomics.xml", "transomics.xml")
+  download.file("https://raw.githubusercontent.com/ecell/transomics2cytoscape/master/transomics.xml", "transomics.xml")
   importVisualStyles(filename = "transomics.xml")
   setVisualStyle("transomics")
   print("Set visual style to 'transomics'")
@@ -109,4 +108,4 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
 }
 
 ## example
-#create3Dnetfile('rno00010', 'rno00010', 'rno04910', 1, 500, 1000, 'output', 'kinase_enzyme.txt')
+#create3Dnetfile('rno00010', 'rno00010', 'rno04910', 1, 200, 400, 'output', 'kinase_enzyme.txt')
