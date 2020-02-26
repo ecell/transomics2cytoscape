@@ -1,12 +1,27 @@
-library(RCy3)
-library(dplyr)
-library(KEGGREST)
-
 installApp('KEGGscape')
 installApp('Cy3D')
 
-create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2, zheight3, output, kinase_enzyme) {
+##' Import multiple KEGG pathways and integrate the pathways
+##' into a cyjs file for Cy3D renderer
+##'
+##' @title Write cyjs file for transomics 3D visualization
+##' @param pathwayID1 a KEGG pathway ID
+##' @param pathwayID2 a KEGG pathway ID
+##' @param pathwayID3 a KEGG pathway ID
+##' @param zheight1 Z height for pathwayID1
+##' @param zheight2 Z height for pathwayID2
+##' @param zheight3 Z height for pathwayID3
+##' @param stylexml Cytoscape style XML file path for 3D visualization
+##' @param kinase2enzyme Tsv file path for transomic interaction edges
+##' @param outputcyjs Output cyjs file path
+##' @author Kozo Nishida
+##' @export
+##' @examples
+##' create3Dcyjs()
 
+create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2, zheight3,
+                         stylexml, kinase2enzyme, outputcyjs) {
+  
   writeLines(keggGet(pathwayID1, option = 'kgml'), paste(pathwayID1, '.xml', sep=''))
   writeLines(keggGet(pathwayID2, option = 'kgml'), paste(pathwayID2, '.xml', sep=''))
   writeLines(keggGet(pathwayID3, option = 'kgml'), paste(pathwayID3, '.xml', sep=''))
@@ -106,6 +121,3 @@ create3Dnetfile <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheigh
   #print(nodes$KEGG_ID[[263]][3])
   #return(c(nodes, edges))
 }
-
-## example
-#create3Dnetfile('rno00010', 'rno00010', 'rno04910', 1, 200, 400, 'output', 'kinase_enzyme.txt')
