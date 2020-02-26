@@ -20,7 +20,7 @@ installApp('Cy3D')
 ##' create3Dcyjs()
 
 create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2, zheight3,
-                         stylexml, kinase2enzyme, outputcyjs) {
+                         kinase2enzyme, outputcyjs) {
   
   writeLines(keggGet(pathwayID1, option = 'kgml'), paste(pathwayID1, '.xml', sep=''))
   writeLines(keggGet(pathwayID2, option = 'kgml'), paste(pathwayID2, '.xml', sep=''))
@@ -81,7 +81,8 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   edges['source'] = as.character(edges$source)
   edges['target'] = as.character(edges$target)
   
-  k2e = read.table(kinase_enzyme)
+  print(kinase2enzyme)
+  k2e = read.table(kinase2enzyme)
   
   for(i in 1:nrow(k2e)) {
     kerow <- k2e[i,]
@@ -108,13 +109,18 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   
   createNetworkFromDataFrames(nodes, edges)
   
-  download.file("https://raw.githubusercontent.com/ecell/transomics2cytoscape/master/transomics.xml", "transomics.xml")
-  importVisualStyles(filename = "transomics.xml")
+  # download.file("https://raw.githubusercontent.com/ecell/transomics2cytoscape/master/data/transomics.xml",
+  #               "transomics.xml")
+  stylexml <- system.file("extdata", "transomics.xml",
+                               package = "transomics2cytoscape")
+  #importVisualStyles(filename = "transomics.xml")
+  print(stylexml)
+  importVisualStyles(filename = stylexml)
   setVisualStyle("transomics")
   print("Set visual style to 'transomics'")
   
-  exportNetwork(output,'cyjs')
-  print(paste('Wrote ', output, '.cyjs in the current working directory.', sep=''))
+  exportNetwork(outputcyjs,'cyjs')
+  print(paste('Wrote ', outputcyjs, '.cyjs in the current working directory.', sep=''))
   print("Please import it from Cytoscape Desktop and select 'Cy3D' from 'Network View Renderer' dropdown list.")
   print("Then you should see the multi layered 3D network space.")
   

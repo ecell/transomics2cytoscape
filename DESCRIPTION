@@ -14,4 +14,8 @@ LazyData: true
 biocViews: Network,
     Software
 VignetteBuilder: knitr
-Imports: knitr
+Imports: knitr,
+    RCy3,
+    KEGGREST,
+    dplyr
+    
