@@ -27,7 +27,7 @@ and also you need to install [Cytoscape](https://cytoscape.org/).
 
 1. Run Cytoscape Desktop
 2. Run R[Studio].
-3. Run the following R code.
+3. Run the following R code. This will get KEGG pathways and import the pathways to Cytoscape and finally integrate the pathways to a CyJS file named "transomics3D.cyjs".
 
 ```R
 library(transomics2cytoscape)
@@ -39,5 +39,13 @@ getwd()
 ```
 
 4. Import transomics3D.cyjs in the `getwd()` directory with Cytoscsape GUI.
+
+  ![](man/figures/ImportingCyjsByGUI.png)
+
 5. Select Cy3D network renderer.
 
+  ![](man/figures/Cy3DrendererSelection.png)
+  
+Now you should see
+
+![](man/figures/3Dview.png)
