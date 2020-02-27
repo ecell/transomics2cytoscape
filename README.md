@@ -18,7 +18,7 @@ using
 ## Installation
 
 ```{R}
-# devtools::install_github("ecell/transomics2cytoscape", build_vignettes = TRUE)
+devtools::install_github("ecell/transomics2cytoscape", build_vignettes = FALSE)
 ```
 
 and also you need to install [Cytoscape](https://cytoscape.org/).
