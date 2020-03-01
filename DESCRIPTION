@@ -1,21 +1,19 @@
 Package: transomics2cytoscape
-Title: What the Package Does (One Line, Title Case)
+Title: Create 3D transomics network view with Çytoscape and Cy3D
 Version: 0.99.0
 Authors@R: 
     person(given = "Kozo",
            family = "Nishida",
            role = c("aut", "cre"),
            email = "knishida@riken.jp",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           comment = c(ORCID = "0000-0001-8501-7319"))
+Description: transomics2cytoscape import multiple KEGG pathways and 
+    combine those to one 3D space and visualize it with Cy3D Cytoscape app.
+License: Artistic-2.0
+Imports: RCy3, KEGGREST, dplyr
+Suggests: testthat, roxygen2, knitr, BiocStyle, rmarkdown
 Encoding: UTF-8
 LazyData: true
-biocViews: Network,
-    Software
+biocViews: Network, Software
 VignetteBuilder: knitr
-Imports: knitr,
-    RCy3,
-    KEGGREST,
-    dplyr
-    
+RoxygenNote: 7.0.2

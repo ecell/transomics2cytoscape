@@ -7,8 +7,8 @@ output:
     BiocStyle::html_document
 vignette: |
     %\VignetteIndexEntry{transomics2cytoscape}
-    %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ## Introduction

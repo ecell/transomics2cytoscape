@@ -1,6 +1,3 @@
-installApp('KEGGscape')
-installApp('Cy3D')
-
 ##' Import multiple KEGG pathways and integrate the pathways
 ##' into a cyjs file for Cy3D renderer
 ##'
@@ -11,30 +8,44 @@ installApp('Cy3D')
 ##' @param zheight1 Z height for pathwayID1
 ##' @param zheight2 Z height for pathwayID2
 ##' @param zheight3 Z height for pathwayID3
-##' @param stylexml Cytoscape style XML file path for 3D visualization
 ##' @param kinase2enzyme Tsv file path for transomic interaction edges
 ##' @param outputcyjs Output cyjs file path
 ##' @author Kozo Nishida
+##' @import dplyr
 ##' @export
 ##' @examples
-##' create3Dcyjs()
+##' library(transomics2cytoscape)
+##' kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
+##'                             package = "transomics2cytoscape")
+##' create3Dcyjs("rno00010", "rno00010", "rno04910", 1, 200, 400,
+##'              kinase2enzyme, "transomics3D.cyjs")
 
 create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2, zheight3,
                          kinase2enzyme, outputcyjs) {
+  apps=RCy3::getInstalledApps()
+  #checking Apps
+  if (length(grep('Cy3D,', apps)) == 0) {
+    print("Cy3D is not installed yet. transomics2cytoscape installs Cy3D.")
+    RCy3::installApp('Cy3D')
+  }
+  if (length(grep('KEGGScape,', apps)) == 0) {
+    print("KEGGScape is not installed yet. transomics2cytoscape installs KEGGScape.")
+    RCy3::installApp('KEGGscape')
+  }
   
-  writeLines(keggGet(pathwayID1, option = 'kgml'), paste(pathwayID1, '.xml', sep=''))
-  writeLines(keggGet(pathwayID2, option = 'kgml'), paste(pathwayID2, '.xml', sep=''))
-  writeLines(keggGet(pathwayID3, option = 'kgml'), paste(pathwayID3, '.xml', sep=''))
+  writeLines(KEGGREST::keggGet(pathwayID1, option = 'kgml'), paste(pathwayID1, '.xml', sep=''))
+  writeLines(KEGGREST::keggGet(pathwayID2, option = 'kgml'), paste(pathwayID2, '.xml', sep=''))
+  writeLines(KEGGREST::keggGet(pathwayID3, option = 'kgml'), paste(pathwayID3, '.xml', sep=''))
   
   # layer1
   print(paste("Importing", pathwayID1))
-  importNetworkFromFile(file = paste(pathwayID1, '.xml', sep=''))
-  Sys.sleep(5)
+  RCy3::importNetworkFromFile(file = paste(pathwayID1, '.xml', sep=''))
+  Sys.sleep(3)
   print(paste("Reading node table", pathwayID1))
-  nodetable1 = getTableColumns()
+  nodetable1 = RCy3::getTableColumns()
   
-  et1 = getTableColumns(table = "edge")
-  ei1 = getEdgeInfo(et1$SUID)
+  et1 = RCy3::getTableColumns(table = "edge")
+  ei1 = RCy3::getEdgeInfo(et1$SUID)
   et1['source'] = unlist(lapply(ei1, function(x) x$source))
   et1['target'] = unlist(lapply(ei1, function(x) x$target))
   
@@ -43,13 +54,13 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   
   # layer2
   print(paste("Importing", pathwayID2))
-  importNetworkFromFile(file = paste(pathwayID2, '.xml', sep=''))
-  Sys.sleep(5)
+  RCy3::importNetworkFromFile(file = paste(pathwayID2, '.xml', sep=''))
+  Sys.sleep(3)
   print(paste("Reading node table", pathwayID2))
-  nodetable2 = getTableColumns()
+  nodetable2 = RCy3::getTableColumns()
   
-  et2 = getTableColumns(table = "edge")
-  ei2 = getEdgeInfo(et2$SUID)
+  et2 = RCy3::getTableColumns(table = "edge")
+  ei2 = RCy3::getEdgeInfo(et2$SUID)
   et2['source'] = unlist(lapply(ei2, function(x) x$source))
   et2['target'] = unlist(lapply(ei2, function(x) x$target))
   
@@ -58,13 +69,13 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   
   #layer3
   print(paste("Importing", pathwayID3))
-  importNetworkFromFile(file = paste(pathwayID3, '.xml', sep=''))
-  Sys.sleep(5)
+  RCy3::importNetworkFromFile(file = paste(pathwayID3, '.xml', sep=''))
+  Sys.sleep(3)
   print(paste("Reading node table", pathwayID3))
-  nodetable3 = getTableColumns()
+  nodetable3 = RCy3::getTableColumns()
   
-  et3 = getTableColumns(table = "edge")
-  ei3 = getEdgeInfo(et3$SUID)
+  et3 = RCy3::getTableColumns(table = "edge")
+  ei3 = RCy3::getEdgeInfo(et3$SUID)
   et3['source'] = unlist(lapply(ei3, function(x) x$source))
   et3['target'] = unlist(lapply(ei3, function(x) x$target))
   
@@ -81,8 +92,8 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   edges['source'] = as.character(edges$source)
   edges['target'] = as.character(edges$target)
   
-  print(kinase2enzyme)
-  k2e = read.table(kinase2enzyme)
+  #print(kinase2enzyme)
+  k2e = utils::read.table(kinase2enzyme)
   
   for(i in 1:nrow(k2e)) {
     kerow <- k2e[i,]
@@ -107,19 +118,19 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
     }
   }
   
-  createNetworkFromDataFrames(nodes, edges)
+  RCy3::createNetworkFromDataFrames(nodes, edges)
   
   # download.file("https://raw.githubusercontent.com/ecell/transomics2cytoscape/master/data/transomics.xml",
   #               "transomics.xml")
   stylexml <- system.file("extdata", "transomics.xml",
                                package = "transomics2cytoscape")
   #importVisualStyles(filename = "transomics.xml")
-  print(stylexml)
-  importVisualStyles(filename = stylexml)
-  setVisualStyle("transomics")
+  #print(stylexml)
+  RCy3::importVisualStyles(filename = stylexml)
+  RCy3::setVisualStyle("transomics")
   print("Set visual style to 'transomics'")
   
-  exportNetwork(outputcyjs,'cyjs')
+  RCy3::exportNetwork(outputcyjs,'cyjs')
   print(paste('Wrote ', outputcyjs, '.cyjs in the current working directory.', sep=''))
   print("Please import it from Cytoscape Desktop and select 'Cy3D' from 'Network View Renderer' dropdown list.")
   print("Then you should see the multi layered 3D network space.")
