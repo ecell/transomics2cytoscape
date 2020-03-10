@@ -95,19 +95,21 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   #print(kinase2enzyme)
   k2e = utils::read.table(kinase2enzyme)
   
+  # return(list(k2e, nodes, edges))
+  
   for(i in 1:nrow(k2e)) {
     kerow <- k2e[i,]
     source = as.character(kerow$V1)
     target = as.character(kerow$V2)
     for(j in 1:nrow(nodes)) {
       row4source = nodes[j,]
-      if (source %in% row4source$KEGG_ID) {
+      if (source %in% unlist(row4source$KEGG_ID)) {
         #print("source")
         #print(noderow$id)
         s = row4source$id
         for (k in 1:nrow(nodes)) {
           row4target = nodes[k,]
-          if (target %in% row4target$KEGG_ID){
+          if (target %in% unlist(row4target$KEGG_ID)){
             t = row4target$id
             #print("target")
             edges %>% add_row(source = s, target = t) -> edges
@@ -119,7 +121,7 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   }
   
   RCy3::createNetworkFromDataFrames(nodes, edges)
-  
+
   # download.file("https://raw.githubusercontent.com/ecell/transomics2cytoscape/master/data/transomics.xml",
   #               "transomics.xml")
   stylexml <- system.file("extdata", "transomics.xml",
@@ -129,7 +131,7 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
   RCy3::importVisualStyles(filename = stylexml)
   RCy3::setVisualStyle("transomics")
   print("Set visual style to 'transomics'")
-  
+
   RCy3::exportNetwork(outputcyjs,'cyjs')
   print(paste('Wrote ', outputcyjs, '.cyjs in the current working directory.', sep=''))
   print("Please import it from Cytoscape Desktop and select 'Cy3D' from 'Network View Renderer' dropdown list.")
