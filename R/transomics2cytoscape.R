@@ -120,7 +120,7 @@ create3Dcyjs <- function(pathwayID1, pathwayID2, pathwayID3, zheight1, zheight2,
     }
   }
   
-  RCy3::createNetworkFromDataFrames(nodes, edges)
+  RCy3::createNetworkFromDataFrames(nodes, unique(edges))
 
   # download.file("https://raw.githubusercontent.com/ecell/transomics2cytoscape/master/data/transomics.xml",
   #               "transomics.xml")
