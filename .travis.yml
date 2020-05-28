@@ -1,12 +1,16 @@
 language: r
-r: bioc-devel
+
+warnings_are_errors: true
+sudo: required
+
+matrix:
+  include:
+    - os: linux
+      dist: bionic
+      r: bioc-devel
+    - os: osx
+      r: bioc-devel
+
 bioc_check: true
 cache: 
   packages: true
-sudo: required
-warnings_are_errors: true
-dist: bionic
-
-after_success:
-    - Rscript -e 'covr::codecov()'
-    
