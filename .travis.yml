@@ -1,0 +1,12 @@
+language: r
+r: bioc-devel
+bioc_check: true
+cache: 
+  packages: true
+sudo: required
+warnings_are_errors: true
+dist: bionic
+
+after_success:
+    - Rscript -e 'covr::codecov()'
+    
