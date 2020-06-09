@@ -18,6 +18,8 @@ using
 ## Installation
 
 ```{R}
+install.packages("devtools")
+Sys.setlocale(category = "LC_ALL", locale = "us")
 devtools::install_github("ecell/transomics2cytoscape", build_vignettes = FALSE)
 ```
 
@@ -31,21 +33,20 @@ and also you need to install [Cytoscape](https://cytoscape.org/).
 
 ```R
 library(transomics2cytoscape)
-kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
-                             package = "transomics2cytoscape")
-create3Dcyjs("rno00010", "rno00010", "rno04910", 1, 200, 400,
-             kinase2enzyme, "transomics3D.cyjs")
+library(dplyr)
+kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt", package = "transomics2cytoscape")
+create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600), kinase2enzyme, "transomics3D")
 getwd()
 ```
 
 4. Import transomics3D.cyjs in the `getwd()` directory with Cytoscsape GUI.
 
-  ![](man/figures/ImportingCyjsByGUI.png)
+  ![](man/figures/importNetwork.jpg) ![](man/figures/importCyjs.jpg)
 
 5. Select Cy3D network renderer.
 
-  ![](man/figures/Cy3DrendererSelection.png)
+  ![](man/figures/importAsCy3D.jpg)
   
 Now you should see
 
-![](man/figures/3Dview.png)
+![](man/figures/4layers.jpg)
