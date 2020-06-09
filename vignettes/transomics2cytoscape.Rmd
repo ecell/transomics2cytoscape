@@ -46,8 +46,8 @@ library(transomics2cytoscape)
 kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
                              package = "transomics2cytoscape")
 print(kinase2enzyme)
-create3Dcyjs("rno00010", "rno00010", "rno04910", 1, 200, 400,
-             kinase2enzyme, "transomics3D.cyjs")
+create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400),
+             kinase2enzyme, "transomics3D")
 ```
 
 ## 3D visualization with Cy3D
