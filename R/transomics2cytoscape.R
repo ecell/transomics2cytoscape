@@ -20,15 +20,15 @@ create3Dcyjs <- function(pathwayList, kinase2enzyme, outputcyjs) {
   
   pathwayIDs <- names(pathwayList)
   lapply(pathwayIDs, getKgml)
-  SUIDs <- lapply(pathwayIDs, importKgml)
-  nodetables <- mapply(getNodeTableWithZheight, SUIDs, pathwayList)
-  edgetables <- lapply(SUIDs, getEdgeTable)
+  suIDs <- lapply(pathwayIDs, importKgml)
+  nodetables <- mapply(getNodeTableWithZheight, suIDs, pathwayList)
+  edgetables <- lapply(suIDs, getEdgeTable)
   
   # Combining
   print("Combining networks...")
   print(length(nodetables))
   nodetable3d = bind_rows(nodetables)
-  nodes <- nodetable3d %>% rename(id = SUID)
+  nodes <- nodetable3d %>% rename(id = "SUID")
   nodes["id"] = as.character(nodes$id)
   
   edges = bind_rows(edgetables)
@@ -99,9 +99,9 @@ getKgml <- function(pathwayID){
 
 importKgml <- function(pathwayID){
   print(paste("Importing", pathwayID))
-  SUID <- RCy3::importNetworkFromFile(file = paste(pathwayID, ".xml", sep = ""))
+  suID <- RCy3::importNetworkFromFile(file = paste(pathwayID, ".xml", sep = ""))
   Sys.sleep(3)
-  return(SUID)
+  return(suID)
 }
 
 getNodeTableWithZheight <- function(suid, zheight){
