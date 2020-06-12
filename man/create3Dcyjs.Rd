@@ -4,10 +4,10 @@
 \alias{create3Dcyjs}
 \title{Write cyjs file for transomics 3D visualization}
 \usage{
-create3Dcyjs(pathwayList, kinase2enzyme, outputcyjs)
+create3Dcyjs(pathwayList, kinase2enzyme, stylexml, outputcyjs)
 }
 \arguments{
-\item{pathwayList}{a list with KEGG pathway ID and the Z height in 3D space}
+\item{pathwayList}{a list with KEGG pathwayID and the Zheight in 3Dspace}
 
 \item{kinase2enzyme}{Tsv file path for transomic interaction edges}
 
@@ -23,8 +23,10 @@ into a cyjs file for Cy3D renderer
 \examples{
 kinase2enzyme <- system.file('extdata', 'kinase_enzyme.txt',
                             package = 'transomics2cytoscape')
-create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400),
-             kinase2enzyme, 'transomics3D')
+stylexml <- system.file("extdata", "transomics.xml",
+                        package = "transomics2cytoscape")
+create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
+                kinase2enzyme, stylexml, 'transomics3D')
 }
 \author{
 Kozo Nishida

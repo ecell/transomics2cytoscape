@@ -44,10 +44,11 @@ library(RCy3)
 library(KEGGREST)
 library(transomics2cytoscape)
 kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
-                             package = "transomics2cytoscape")
-print(kinase2enzyme)
-create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400),
-             kinase2enzyme, "transomics3D")
+                                package = "transomics2cytoscape")
+stylexml <- system.file("extdata", "transomics.xml",
+                        package = "transomics2cytoscape")
+create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
+                        kinase2enzyme, stylexml, 'transomics3D')
 ```
 
 ## 3D visualization with Cy3D
