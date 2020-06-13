@@ -3,7 +3,9 @@ Title: Create 3D transomics network view with Cytoscape and Cy3D
 Version: 0.99.0
 Authors@R: c(
     person ("Kozo", "Nishida", email = "kozo.nishida@gmail.com",
-        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8501-7319"))
+        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8501-7319")),
+    person ("Katsuyuki", "Yugi", email = "katsuyuki.yugi@riken.jp",
+        role = c("aut"), comment = c(ORCID = "0000-0002-2046-4289"))
     )
 Description: transomics2cytoscape import multiple KEGG pathways and 
     combine those to one 3D space and visualize it with Cy3D Cytoscape app.
