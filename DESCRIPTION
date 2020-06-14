@@ -16,4 +16,5 @@ Encoding: UTF-8
 LazyData: true
 biocViews: Network, Software, Pathways, DataImport, KEGG
 VignetteBuilder: knitr
+SystemRequirements: Java 11, Cytoscape 3.8.*
 RoxygenNote: 7.1.0
