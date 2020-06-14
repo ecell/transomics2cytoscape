@@ -1,0 +1,22 @@
+How to install (and run) Cytoscape on Linux
+
+1. Run `sudo apt-get install -y openjdk-11-jdk wget xvfb` in the terminal.
+2. Run `wget https://github.com/cytoscape/cytoscape/releases/download/3.8.0/cytoscape-unix-3.8.0.tar.gz` in the terminal.
+3. Run `tar xf cytoscape-unix-3.8.0.tar.gz` in the terminal.
+4. Add the decompressed cytoscape-unix-3.8.0 directory path to the $PATH environmental variable.
+
+How to install Cytoscape on Mac
+
+1. Run `wget https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7%2B10/OpenJDK11U-jdk_x64_mac_hotspot_11.0.7_10.pkg` in the terminal.
+2. Run `open OpenJDK11U-jdk_x64_mac_hotspot_11.0.7_10.pkg` in the terminal.
+3. Run `wget https://github.com/cytoscape/cytoscape/releases/download/3.8.0/cytoscape-unix-3.8.0.tar.gz` in the terminal.
+4. Run `tar xf cytoscape-unix-3.8.0.tar.gz` in the terminal.
+5. Add the decompressed cytoscape-unix-3.8.0 directory path to the $PATH environmental variable.
+
+How to install Cytoscape on Windows
+
+1. Download https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7%2B10.2/OpenJDK11U-jdk_x64_windows_hotspot_11.0.7_10.msi
+2. Install OpenJDK11U-jdk_x64_windows_hotspot_11.0.7_10.msi
+3. Download https://github.com/cytoscape/cytoscape/releases/download/3.8.0/cytoscape-windows-3.8.0.zip
+4. Unzip cytoscape-windows-3.8.0.zip
+5. Add the decompressed cytoscape-windows-3.8.0 folder path to PATH environmental variable.
