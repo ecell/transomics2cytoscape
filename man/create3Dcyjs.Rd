@@ -24,12 +24,14 @@ Import multiple KEGG pathways and integrate the pathways
 into a cyjs file for Cy3D renderer
 }
 \examples{
+\donttest{
 kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
 create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
     kinase2enzyme, stylexml, "transomics3D")
+}
 }
 \author{
 Kozo Nishida
