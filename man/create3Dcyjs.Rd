@@ -2,16 +2,19 @@
 % Please edit documentation in R/transomics2cytoscape.R
 \name{create3Dcyjs}
 \alias{create3Dcyjs}
-\title{Write cyjs file for transomics 3D visualization}
+\title{Write cyjs file for transomics 3D visualization.}
 \usage{
-create3Dcyjs(pathwayList, kinase2enzyme, stylexml, outputcyjs)
+create3Dcyjs(pathwayZheights, kinase2enzyme, stylexml, outputcyjs)
 }
 \arguments{
-\item{pathwayList}{a list with KEGG pathwayID and the Zheight in 3Dspace}
+\item{pathwayZheights}{A list with KEGG pathway ID and Z height in 3D
+space.}
 
-\item{kinase2enzyme}{Tsv file path for transomic interaction edges}
+\item{kinase2enzyme}{A TSV file path between pathway network layers.}
 
-\item{outputcyjs}{Output cyjs file path}
+\item{stylexml}{A path of Cytoscape style file to be applied to 3D network.}
+
+\item{outputcyjs}{An output path of 3D network cyjs file.}
 }
 \value{
 This function writes a cyjs file and returns no value.
@@ -21,12 +24,12 @@ Import multiple KEGG pathways and integrate the pathways
 into a cyjs file for Cy3D renderer
 }
 \examples{
-kinase2enzyme <- system.file('extdata', 'kinase_enzyme.txt',
-                            package = 'transomics2cytoscape')
+kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
+    package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
-                        package = "transomics2cytoscape")
+    package = "transomics2cytoscape")
 create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
-                kinase2enzyme, stylexml, 'transomics3D')
+    kinase2enzyme, stylexml, "transomics3D")
 }
 \author{
 Kozo Nishida
