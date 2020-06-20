@@ -1,17 +1,23 @@
 Package: transomics2cytoscape
 Title: Create a file for Cy3D transomics network with Cytoscape
-Version: 0.99.5
+Version: 0.99.6
 Authors@R: c(
     person ("Kozo", "Nishida", email = "kozo.nishida@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8501-7319")),
     person ("Katsuyuki", "Yugi", email = "katsuyuki.yugi@riken.jp",
         role = c("aut"), comment = c(ORCID = "0000-0002-2046-4289"))
     )
-Description: transomics2cytoscape generates a file for transomics visualization
-    in 3D space by providing input that specifies the IDs of multiple
-    KEGG pathways, their corresponding Z-axis heights, and an input that
-    represents the edges between the kinases and enzymes that connect
-    the pathways with different Z-axis heights.
+Description: transomics2cytoscape generates a file for 3D transomics
+    visualization by providing input that specifies the IDs of multiple
+    KEGG pathway layers, their corresponding Z-axis heights, and an input that
+    represents the edges between the pathway layers.
+    The edges are used, for example, to describe the relationships between
+    kinase on a pathway and enzyme on another pathway.
+    This package automates creation of a transomics network as
+    shown in the figure in Yugi.2014
+    (https://doi.org/10.1016/j.celrep.2014.07.021)
+    using Cytoscape automation
+    (https://doi.org/10.1186/s13059-019-1758-4).
 License: Artistic-2.0
 Imports: RCy3, KEGGREST, dplyr
 Suggests: testthat, roxygen2, knitr, BiocStyle, rmarkdown
