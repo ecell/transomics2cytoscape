@@ -38,7 +38,7 @@ using
 # devtools::install_github("ecell/transomics2cytoscape", build_vignettes = TRUE)
 ```
 
-## Usage
+## 3D network visualization for transomics
 
 ```{r setup}
 # suppressPackageStartupMessages(library(dplyr))
@@ -53,17 +53,9 @@ kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
-create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
-    kinase2enzyme, stylexml, "transomics3D")
+create3Dnetwork(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
+    kinase2enzyme, stylexml)
 ```
-
-## 3D visualization with Cy3D
-
-Since Cytoscape Automation cannot select Cy3D network renderer,
-You need to import the output.cyjs using the Cytoscape GUI.
-
-Now you should see the following 3D visualization:
-
 
 ## Session information {.unnumbered}
 
