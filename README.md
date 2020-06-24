@@ -29,24 +29,16 @@ and also you need to install [Cytoscape](https://cytoscape.org/).
 
 1. Run Cytoscape Desktop
 2. Run R[Studio].
-3. Run the following R code. This will get KEGG pathways and import the pathways to Cytoscape and finally integrate the pathways to a CyJS file named "transomics3D.cyjs".
+3. Run the following R code. This will get KEGG pathways and import and integrate the pathways to a 3D space. The pathway network is layered at the Z coordinate specified by the first list argumentt, and is connected by the edges (that is, transomics interaction) between the layers specified in `kinase_enzyme.txt`. The 3D network will be styled as specified in `transomics.xml`.
 
 ```R
 library(transomics2cytoscape)
 library(dplyr)
 kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt", package = "transomics2cytoscape")
-create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600), kinase2enzyme, "transomics3D")
-getwd()
+stylexml <- system.file("extdata", "transomics.xml", package = "transomics2cytoscape")
+create3Dnetwork(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600), kinase2enzyme, stylexml)
 ```
 
-4. Import transomics3D.cyjs in the `getwd()` directory with Cytoscsape GUI.
-
-  ![](man/figures/importNetwork.jpg) ![](man/figures/importCyjs.jpg)
-
-5. Select Cy3D network renderer.
-
-  ![](man/figures/importAsCy3D.jpg)
-  
-Now you should see
+Then, you should have a 3D view with layered pathways and transomics interactions between them.
 
 ![](man/figures/4layers.jpg)
