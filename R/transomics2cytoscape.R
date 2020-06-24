@@ -1,13 +1,14 @@
 ##' Import multiple KEGG pathways and integrate the pathways
-##' into a cyjs file for Cy3D renderer
+##' into Cy3D renderer
 ##'
-##' @title Write cyjs file for transomics 3D visualization.
+##' @title Create 3D network view for transomics visualization.
 ##' @param pathwayZheights A list with KEGG pathway ID and Z height in 3D
 ##' space.
-##' @param kinase2enzyme A TSV file path between pathway network layers.
-##' @param outputcyjs An output path of 3D network cyjs file.
-##' @param stylexml A path of Cytoscape style file to be applied to 3D network.
-##' @return This function writes a cyjs file and returns no value. 
+##' @param kinase2enzyme A TSV file path for the edges between pathway network
+##' layers.
+##' @param stylexml A XML file path for Cytoscape style file to be applied to
+##' the 3D network.
+##' @return A SUID of the 3D network. 
 ##' @author Kozo Nishida
 ##' @import dplyr
 ##' @export
@@ -16,11 +17,11 @@
 ##'     package = "transomics2cytoscape")
 ##' stylexml <- system.file("extdata", "transomics.xml",
 ##'     package = "transomics2cytoscape")
-##' create3Dcyjs(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
-##'     kinase2enzyme, stylexml, "transomics3D")
+##' create3Dnetwork(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
+##'     kinase2enzyme, stylexml)
 ##' }
 
-create3Dcyjs <- function(pathwayZheights, kinase2enzyme, stylexml, outputcyjs) {
+create3Dnetwork <- function(pathwayZheights, kinase2enzyme, stylexml) {
     tryCatch({
         RCy3::cytoscapePing()
     }, error = function(e) {
@@ -37,9 +38,10 @@ create3Dcyjs <- function(pathwayZheights, kinase2enzyme, stylexml, outputcyjs) {
     layeredNodes <- getLayeredNodes(nodetables)
     transomicsEdges <- addTransomicsEdges(edgetables, kinase2enzyme,
                                             layeredNodes)
+    RCy3::commandsPOST('cy3d set renderer')
     suID <- RCy3::createNetworkFromDataFrames(layeredNodes, transomicsEdges)
     setTransomicStyle(stylexml, suID)
-    exportTransomicCyjs(outputcyjs, suID)
+    return(suID)
 }
 
 checkCyApps <- function(){
@@ -122,13 +124,4 @@ setTransomicStyle <- function(xml, suid){
     RCy3::importVisualStyles(filename = xml)
     RCy3::setVisualStyle("transomics", network = suid)
     message("Set visual style to 'transomics'")
-}
-
-exportTransomicCyjs <- function(outputcyjs, suid){
-    RCy3::exportNetwork(outputcyjs, "cyjs", network = suid)
-    cyjspath = normalizePath(paste(outputcyjs, ".cyjs", sep = ""))
-    message(paste("Wrote cyjs file in ", cyjspath, sep = ""))
-    message(paste("Please import", cyjspath,
-    "from Cytoscape Desktop and select 'Cy3D' from 'Network View Renderer'",
-    "dropdown list. Then you should see the multi layered 3D network space."))
 }
