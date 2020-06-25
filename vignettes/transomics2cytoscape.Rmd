@@ -26,11 +26,12 @@ knitr::opts_chunk$set(
 ```
 
 # Version Information
-**R version**: R version 4.0.2 (2020-06-25)
 
-**Bioconductor version**: 3.11
+**R version**: `r R.version.string`
 
-**Cytoscape**: 3.8.0
+**Bioconductor version**: `r BiocManager::version()`
+
+**Cytoscape**: `r RCy3::cytoscapeVersionInfo()`
 
 **Cy3D (Cytoscape app)**: 1.1.1
 
