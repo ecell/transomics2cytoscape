@@ -1,10 +1,19 @@
 ---
 title: "transomics2cytoscape"
-author: "Kozo Nishida"
-date: "2/26/2020"
+author:
+  - name: Kozo Nishida
+    affiliation:
+      - RIKEN Center for Biosystems Dynamics Research
+    email: knishida@riken.jp
+  - name: Katsuyuki Yugi
+    affiliation:
+      - RIKEN Center for Integrative Medical Sciences
+    email: katsuyuki.yugi@riken.jp
+date: "26 June 2020"
 package: transomics2cytoscape
-output:
-    BiocStyle::html_document
+output: BiocStyle::html_document
+bibliography: references.bib
+csl: biometrics.csl
 vignette: |
     %\VignetteIndexEntry{transomics2cytoscape}
     %\VignetteEncoding{UTF-8}
@@ -17,26 +26,43 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+# Version Information
 
-To understand transomics datasets, [Yugi et al.
-2014](https://pubmed.ncbi.nlm.nih.gov/25131207)
-has proposed a method for network visualization
-by integrating multiple pathways in 3D space.
+**R version**: `r R.version.string`
 
-The 3D network visualization was created by
-[VANTED](https://pubmed.ncbi.nlm.nih.gov/23140568)
-and manual operation. transomics2cytoscape automatically
-creates the network data for Cytoscape and
+**Bioconductor version**: `r BiocManager::version()`
+
+**Cytoscape**: 3.8.0
+
+**Cy3D (Cytoscape app)**: 1.1.1
+
+**KEGGscape (Cytoscape app)**: 0.8.2
+
+# Introduction
+
+Visualization of transomic networks helps biological interpretation by
+exhibiting where the signal goes [@gehlenborg_visualization_2010].
+
+To understand transomics datasets, Yugi has proposed a method for network
+visualization [@yugi_reconstruction_2014] by integrating multiple pathways
+in 3D space.
+
+The 3D network visualization was created by VANTED [@rohn_vanted_2012]
+and manual operation.
+transomics2cytoscape automatically creates the network data for
+Cytoscape [@shannon_cytoscape:_2003] and
 [Cy3D](http://apps.cytoscape.org/apps/cy3d) renderer
-using
-[Cytoscape Automation](https://pubmed.ncbi.nlm.nih.gov/31477170).
+using Cytoscape Automation [@otasek_cytoscape_2019].
 
 ## Installation
 
 ```{R}
 # devtools::install_github("ecell/transomics2cytoscape", build_vignettes = TRUE)
 ```
+
+# Package Content
+
+## Sample data
 
 ## 3D network visualization for transomics
 
@@ -57,8 +83,12 @@ create3Dnetwork(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
     kinase2enzyme, stylexml)
 ```
 
+# Workflow steps
+
 ## Session information {.unnumbered}
 
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```
+
+# References
