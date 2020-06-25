@@ -1,6 +1,14 @@
 ---
 title: "transomics2cytoscape"
-author: "Kozo Nishida and Katsuyuki Yugi"
+author:
+  - name: Kozo Nishida
+    affiliation:
+      - RIKEN Center for Biosystems Dynamics Research
+    email: knishida@riken.jp
+  - name: Katsuyuki Yugi
+    affiliation:
+      - RIKEN Center for Integrative Medical Sciences
+    email: katsuyuki.yugi@riken.jp
 date: "26 June 2020"
 package: transomics2cytoscape
 output:
@@ -21,8 +29,6 @@ knitr::opts_chunk$set(
 **R version**: R version 4.0.2 (2020-06-25)
 
 **Bioconductor version**: 3.11
-
-**Package**: 0.99.8
 
 **Cytoscape**: 3.8.0
 
