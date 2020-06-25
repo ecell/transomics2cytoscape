@@ -1,7 +1,7 @@
 ---
 title: "transomics2cytoscape"
-author: "Kozo Nishida"
-date: "2/26/2020"
+author: "Kozo Nishida and Katsuyuki Yugi"
+date: "26 June 2020"
 package: transomics2cytoscape
 output:
     BiocStyle::html_document
@@ -17,10 +17,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+# Version Information
+**R version**: R version 4.0.2 (2020-06-25)
 
-To understand transomics datasets, [Yugi et al.
-2014](https://pubmed.ncbi.nlm.nih.gov/25131207)
+**Bioconductor version**: 3.11
+
+**Package**: 0.99.8
+
+**Cytoscape**: 3.8.0
+
+**Cy3D (Cytoscape app)**: 1.1.1
+
+**KEGGscape (Cytoscape app)**: 0.8.2
+
+# Introduction
+
+To understand transomics datasets,
+[Yugi et al.2014](https://pubmed.ncbi.nlm.nih.gov/25131207)
 has proposed a method for network visualization
 by integrating multiple pathways in 3D space.
 
@@ -37,6 +50,10 @@ using
 ```{R}
 # devtools::install_github("ecell/transomics2cytoscape", build_vignettes = TRUE)
 ```
+
+# Package Content
+
+## Sample data
 
 ## 3D network visualization for transomics
 
@@ -56,6 +73,8 @@ stylexml <- system.file("extdata", "transomics.xml",
 create3Dnetwork(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
     kinase2enzyme, stylexml)
 ```
+
+# Workflow steps
 
 ## Session information {.unnumbered}
 
