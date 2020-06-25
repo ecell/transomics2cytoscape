@@ -1,6 +1,6 @@
 Package: transomics2cytoscape
 Title: Create a file for Cy3D transomics network with Cytoscape
-Version: 0.99.8
+Version: 0.99.9
 Authors@R: c(
     person ("Kozo", "Nishida", email = "kozo.nishida@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8501-7319")),
