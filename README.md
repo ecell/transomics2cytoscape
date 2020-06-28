@@ -20,7 +20,7 @@ using
 ```{R}
 install.packages("devtools")
 Sys.setlocale(category = "LC_ALL", locale = "us")
-devtools::install_github("ecell/transomics2cytoscape", build_vignettes = FALSE)
+devtools::install_github("ecell/transomics2cytoscape", ref = "any-network-layer", build_vignettes = FALSE)
 ```
 
 and also you need to install [Cytoscape](https://cytoscape.org/).
