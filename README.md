@@ -29,16 +29,22 @@ and also you need to install [Cytoscape](https://cytoscape.org/).
 
 1. Run Cytoscape Desktop
 2. Run R[Studio].
-3. Run the following R code. This will get KEGG pathways and import and integrate the pathways to a 3D space. The pathway network is layered at the Z coordinate specified by the first list argumentt, and is connected by the edges (that is, transomics interaction) between the layers specified in `kinase_enzyme.txt`. The 3D network will be styled as specified in `transomics.xml`.
+3. Run the following R code. This will import multiple networks and integrate the networks to a 3D space. The networks are layered at the Z coordinate specified by a tsv file [networkLayers.tsv](./inst/extdata/networkLayers.tsv), and are connected by the edges (that is, transomics interaction) between the layers specified in [transomicEdges.tsv](./inst/extdata/transomicEdges.tsv). The 3D network will be styled as specified in [transomics.xml](./inst/extdata/transomics.xml).
 
 ```R
 library(transomics2cytoscape)
 library(dplyr)
-kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt", package = "transomics2cytoscape")
-stylexml <- system.file("extdata", "transomics.xml", package = "transomics2cytoscape")
-create3Dnetwork(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600), kinase2enzyme, stylexml)
+sif <- system.file("extdata","galFiltered.sif",package="RCy3")
+file.copy(sif, ".")
+networkLayers <- system.file("extdata", "networkLayers.tsv",
+    package = "transomics2cytoscape")
+transomicEdges <- system.file("extdata", "transomicEdges.tsv",
+    package = "transomics2cytoscape")
+stylexml <- system.file("extdata", "transomics.xml",
+    package = "transomics2cytoscape")
+create3Dnetwork(networkLayers, transomicEdges, stylexml)
 ```
 
-Then, you should have a 3D view with layered pathways and transomics interactions between them.
+Then, you should have a 3D view with layered networks and transomics interactions between them.
 
 ![](man/figures/4layers.jpg)
