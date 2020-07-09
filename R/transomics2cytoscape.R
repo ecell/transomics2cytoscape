@@ -36,23 +36,21 @@ create3Dnetwork <- function(networkLayers, transomicEdges, stylexml) {
             Please check that Cytoscape is up and running.")
     })
     checkCyApps()
-    # pathwayIDs <- names(pathwayZheights)
     layerTable <- utils::read.table(networkLayers)
     networkFilePaths <- layerTable$V2
     layers <- lapply(networkFilePaths, importLayer)
-    # lapply(pathwayIDs, getKgml)
-    # suIDs <- lapply(pathwayIDs, importKgml)
     networkZheights <- layerTable$V3
     layerIndices <- layerTable$V1
     nodetables <- mapply(getNodeTableWithZheight, layers, networkZheights,
                         layerIndices)
     edgetables <- lapply(layers, getEdgeTable)
     message("Layering the networks and adding transomics edges in 3D space...")
-    #return(nodetables)
     layeredNodes <- getLayeredNodes(nodetables)
     message("Adding transomic interaction edges between the network layers...")
     allEdges <- addTransomicsEdges(edgetables, transomicEdges,
                                             layeredNodes)
+    allEdges <- apply(allEdges, 2, as.character)
+    # write.table(allEdges, file = "edges2.txt")
     RCy3::commandsPOST('cy3d set renderer')
     suID <- RCy3::createNetworkFromDataFrames(layeredNodes, allEdges)
     setTransomicStyle(stylexml, suID)
@@ -101,20 +99,10 @@ getKgml <- function(pathwayID){
                 paste(pathwayID, ".xml", sep = ""))
 }
 
-# importKgml <- function(pathwayID){
-#     message(paste("Importing", pathwayID))
-#     suID <- RCy3::importNetworkFromFile(file = paste(pathwayID, ".xml",
-#                                                         sep = ""))
-#     Sys.sleep(5)
-#     RCy3::setVisualStyle("KEGG Style")
-#     RCy3::fitContent()
-#     return(suID)
-# }
-
 getNodeTableWithZheight <- function(suid, zheight, layerIndex){
     nodetable = RCy3::getTableColumns(table = "node", network = suid$suID)
     IS_KEGG = rep(suid$isKEGG, nrow(nodetable))
-    KEGG_NODE_Z = rep(zheight, nrow(nodetable))
+    KEGG_NODE_Z = as.character(rep(zheight, nrow(nodetable)))
     LAYER_INDEX = rep(layerIndex, nrow(nodetable))
     if (!(suid$isKEGG)) {
         positionTable = RCy3::getNodePosition(network = suid$suID)
@@ -158,8 +146,6 @@ addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
     edges = bind_rows(edgetables)
     edges["source"] = as.character(edges$source)
     edges["target"] = as.character(edges$target)
-    #k2e = utils::read.table(transomicEdges)
-    
     transomicTable = utils::read.table(transomicEdges)
     
     for (sourceLayerIndex in unique(transomicTable$V1)) {
@@ -168,6 +154,7 @@ addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
         for (i in seq_len(nrow(transomicEdges))) {
             transomicEdge = transomicEdges[i,]
             sourceNodeName = as.character(transomicEdge$V2)
+            transomicInteraction = transomicEdge$V5
             for (j in seq_len(nrow(sourceNodeTable))) {
                 nodeRow = sourceNodeTable[j,]
                 if (sourceNodeTable$IS_KEGG[1]) {
@@ -181,12 +168,12 @@ addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
                             if (targetNodeTable$IS_KEGG[1]) {
                                 if (targetNodeName %in% unlist(nodeRow$KEGG_ID)) {
                                     t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t)
+                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
                                 }
                             } else {
                                 if (grepl(targetNodeName, nodeRow$name)) {
                                     t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t)
+                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
                                 }
                             }
                         }
@@ -202,12 +189,12 @@ addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
                             if (targetNodeTable$IS_KEGG[1]) {
                                 if (targetNodeName %in% unlist(nodeRow$KEGG_ID)) {
                                     t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t)
+                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
                                 }
                             } else {
                                 if (grepl(targetNodeName, nodeRow$name)) {
                                     t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t)
+                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
                                 }
                             }
                         }
@@ -216,44 +203,6 @@ addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
             }
         }
     }
-    
-    # sourceLayerIndex = unique(k2e$V1)[1]
-    # sourceNodeNames = dplyr::filter(k2e, V1==sourceLayerIndex)$V2
-    # 
-    # nodeTable = dplyr::filter(layeredNodes, LAYER_INDEX==sourceLayerIndex)
-    # for (sourceNodeName in sourceNodeNames){
-    #     if (nodeTable$IS_KEGG[1]) {
-    #         for (i in seq_len(nrow(nodeTable))){
-    #             row4source = nodeTable[i,]
-    #             if (sourceNodeName %in% unlist(row4source$KEGG_ID)) {
-    #                 s = row4source$id
-    #             }
-    #             for (j in seq_len(nrow(nodeTable))) {
-    # 
-    #             }
-    #         }
-    #     }
-    # }
-    # 
-    # for (i in seq_len(nrow(k2e))) {
-    #     kerow <- k2e[i, ]
-    #     source = as.character(kerow$V1)
-    #     target = as.character(kerow$V2)
-    #     for (j in seq_len(nrow(layeredNodes))) {
-    #         row4source = layeredNodes[j, ]
-    #         if (source %in% unlist(row4source$KEGG_ID)) {
-    #             s = row4source$id
-    #             for (k in seq_len(nrow(layeredNodes))) {
-    #                 row4target = layeredNodes[k, ]
-    #                 if (target %in% unlist(row4target$KEGG_ID)) {
-    #                     t = row4target$id
-    #                     edges <- edges %>% add_row(source = s, target = t)
-    #                 }
-    #             }
-    #         }
-    #     }
-    # }
-    
     return(unique(edges))
 }
 
