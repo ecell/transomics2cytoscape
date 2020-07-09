@@ -72,7 +72,7 @@ checkCyApps <- function(){
 }
 
 importLayer <- function(networkFilePath){
-    fileExtension <- tail(unlist(strsplit(networkFilePath, "\\.")), n=1)
+    fileExtension <- utils::tail(unlist(strsplit(networkFilePath, "\\.")), n=1)
     if (fileExtension %in% c("sif", "gml", "xgmml", "xml")){
         message(paste("Importing", networkFilePath))
         suID <- RCy3::importNetworkFromFile(file = networkFilePath)
@@ -142,6 +142,27 @@ getLayeredNodes <- function(nodetables){
     return(layeredNodes)
 }
 
+appendTransomicsEdges <- function(edges, targetNodeTable, targetNodeName,
+                                sourceId, transomicInteraction){
+    for (k in seq_len(nrow(targetNodeTable))) {
+        nodeRow = targetNodeTable[k,]
+        if (targetNodeTable$IS_KEGG[1]) {
+            if (targetNodeName %in% unlist(nodeRow$KEGG_ID)) {
+                targetId = nodeRow$id
+                edges <- edges %>% add_row(source = sourceId,
+                        target = targetId, interaction = transomicInteraction)
+            }
+        } else {
+            if (grepl(targetNodeName, nodeRow$name)) {
+                targetId = nodeRow$id
+                edges <- edges %>% add_row(source = sourceId,
+                        target = targetId, interaction = transomicInteraction)
+            }
+        }
+    }
+    return(edges)
+}
+
 addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
     edges = bind_rows(edgetables)
     edges["source"] = as.character(edges$source)
@@ -149,8 +170,9 @@ addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
     transomicTable = utils::read.table(transomicEdges)
     
     for (sourceLayerIndex in unique(transomicTable$V1)) {
-        transomicEdges = dplyr::filter(transomicTable, V1==sourceLayerIndex)
-        sourceNodeTable = dplyr::filter(layeredNodes, LAYER_INDEX==sourceLayerIndex)
+        transomicEdges = dplyr::filter(transomicTable, V1 == sourceLayerIndex)
+        sourceNodeTable = dplyr::filter(layeredNodes,
+                                        LAYER_INDEX == sourceLayerIndex)
         for (i in seq_len(nrow(transomicEdges))) {
             transomicEdge = transomicEdges[i,]
             sourceNodeName = as.character(transomicEdge$V2)
@@ -162,42 +184,20 @@ addTransomicsEdges <- function(edgetables, transomicEdges, layeredNodes){
                         s = nodeRow$id
                         targetLayerIndex = transomicEdge$V3
                         targetNodeName = transomicEdge$V4
-                        targetNodeTable = dplyr::filter(layeredNodes, LAYER_INDEX==targetLayerIndex)
-                        for (k in seq_len(nrow(targetNodeTable))) {
-                            nodeRow = targetNodeTable[k,]
-                            if (targetNodeTable$IS_KEGG[1]) {
-                                if (targetNodeName %in% unlist(nodeRow$KEGG_ID)) {
-                                    t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
-                                }
-                            } else {
-                                if (grepl(targetNodeName, nodeRow$name)) {
-                                    t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
-                                }
-                            }
-                        }
+                        targetNodeTable = dplyr::filter(layeredNodes,
+                                            LAYER_INDEX==targetLayerIndex)
+                        edges = appendTransomicsEdges(edges, targetNodeTable,
+                                    targetNodeName, s, transomicInteraction)
                     }
                 } else {
                     if (grepl(sourceNodeName, nodeRow$name)) {
                         s = nodeRow$id
                         targetLayerIndex = transomicEdge$V3
                         targetNodeName = transomicEdge$V4
-                        targetNodeTable = dplyr::filter(layeredNodes, LAYER_INDEX==targetLayerIndex)
-                        for (k in seq_len(nrow(targetNodeTable))) {
-                            nodeRow = targetNodeTable[k,]
-                            if (targetNodeTable$IS_KEGG[1]) {
-                                if (targetNodeName %in% unlist(nodeRow$KEGG_ID)) {
-                                    t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
-                                }
-                            } else {
-                                if (grepl(targetNodeName, nodeRow$name)) {
-                                    t = nodeRow$id
-                                    edges <- edges %>% add_row(source = s, target = t, interaction = transomicInteraction)
-                                }
-                            }
-                        }
+                        targetNodeTable = dplyr::filter(layeredNodes,
+                                            LAYER_INDEX==targetLayerIndex)
+                        edges = appendTransomicsEdges(edges, targetNodeTable,
+                                    targetNodeName, s, transomicInteraction)
                     }
                 }
             }
