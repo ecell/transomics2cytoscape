@@ -2,17 +2,15 @@
 
 ## Introduction
 
-To understand transomics datasets, [Yugi et al.
-2014](https://pubmed.ncbi.nlm.nih.gov/25131207)
-has proposed a method for network visualization
-by integrating multiple pathways in 3D space.
-
+To understand transomics datasets, [Yugi et al. 2014](https://pubmed.ncbi.nlm.nih.gov/25131207)
+has proposed a method for network visualization by integrating multiple pathways in 3D space.
 The 3D network visualization was created by
 [VANTED](https://pubmed.ncbi.nlm.nih.gov/23140568)
-and manual operation. transomics2cytoscape automatically
-creates the network data for Cytoscape and
-[Cy3D](http://apps.cytoscape.org/apps/cy3d) renderer
-using
+and manual operation.
+
+transomics2cytoscape automatically creates the 3D network visualization with
+[Cytoscape](https://cytoscape.org/), 
+[Cy3D](http://apps.cytoscape.org/apps/cy3d) renderer, and
 [Cytoscape Automation](https://pubmed.ncbi.nlm.nih.gov/31477170).
 
 ## Installation
@@ -43,6 +41,25 @@ transomicEdges <- system.file("extdata", "transomicEdges.tsv",
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
 create3Dnetwork(networkLayers, transomicEdges, stylexml)
+```
+
+The format of `networkLayers.tsv`.
+The first column is the network layer ID, the second column is the KEGG pathway ID or an arbitrary network file, and the last column is the Z height of the network.
+```
+layer1	rno04910	600
+layer2	galFiltered.sif	400
+layer3	rno00010	200
+layer4	rno00010	1
+```
+
+The format of `transomicEdges.tsv`.
+The first and second column is the information about source node of the transomic interaction. The third and fourth column is about the target node.
+The second and fourth column is the id of KEGG object or the name of a node in an arbitrary network file.
+The last column is the type of the transomic interaction.
+```
+layer1	rno:84006	layer2	YMR300C	transomicsType1
+layer2	YMR300C	layer3	rno:100364062	transomicsType2
+layer3	rno:100364062	layer4	rno:100364062	transomicsType3
 ```
 
 Then, you should have a 3D view with layered networks and transomics interactions between them.
