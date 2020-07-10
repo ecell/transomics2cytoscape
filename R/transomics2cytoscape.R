@@ -5,11 +5,11 @@
 ##' @param networkLayers A TSV file path for the 3 column rows of 
 ##' (layer index, the network file path, Z height of the network layer)
 ##' in 3D space.
-##' @param transomicEdges A TSV file path for the first 4 column rows of
+##' @param transomicEdges A TSV file path for the first 5 column rows of
 ##' (layer index of a source node, a name of source node,
-##' layer index of a target node, a name of target node)
+##' layer index of a target node, a name of target node,
+##' interaction type)
 ##' representing transomic interaction edges between the network layers.
-##' You can add any number of columns after the first 4 columns.
 ##' @param stylexml A XML file path for Cytoscape style file to be applied to
 ##' the 3D network.
 ##' @return A SUID of the 3D network. 
