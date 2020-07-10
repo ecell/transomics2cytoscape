@@ -4,14 +4,18 @@
 \alias{create3Dnetwork}
 \title{Create 3D network view for transomics visualization.}
 \usage{
-create3Dnetwork(pathwayZheights, kinase2enzyme, stylexml)
+create3Dnetwork(networkLayers, transomicEdges, stylexml)
 }
 \arguments{
-\item{pathwayZheights}{A list with KEGG pathway ID and Z height in 3D
-space.}
+\item{networkLayers}{A TSV file path for the 3 column rows of 
+(layer index, the network file path, Z height of the network layer)
+in 3D space.}
 
-\item{kinase2enzyme}{A TSV file path for the edges between pathway network
-layers.}
+\item{transomicEdges}{A TSV file path for the first 5 column rows of
+(layer index of a source node, a name of source node,
+layer index of a target node, a name of target node,
+interaction type)
+representing transomic interaction edges between the network layers.}
 
 \item{stylexml}{A XML file path for Cytoscape style file to be applied to
 the 3D network.}
@@ -25,12 +29,15 @@ into Cy3D renderer
 }
 \examples{
 \donttest{
-kinase2enzyme <- system.file("extdata", "kinase_enzyme.txt",
+sif <- system.file("extdata","galFiltered.sif",package="RCy3")
+file.copy(sif, ".")
+networkLayers <- system.file("extdata", "networkLayers.tsv",
+    package = "transomics2cytoscape")
+transomicEdges <- system.file("extdata", "transomicEdges.tsv",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
-create3Dnetwork(c(rno00010=1, rno00010=200, rno04910=400, rno04910=600),
-    kinase2enzyme, stylexml)
+create3Dnetwork(networkLayers, transomicEdges, stylexml)
 }
 }
 \author{
