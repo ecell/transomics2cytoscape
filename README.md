@@ -31,7 +31,6 @@ and also you need to install [Cytoscape](https://cytoscape.org/).
 
 ```R
 library(transomics2cytoscape)
-library(dplyr)
 sif <- system.file("extdata","galFiltered.sif",package="RCy3")
 file.copy(sif, ".")
 networkLayers <- system.file("extdata", "networkLayers.tsv",
@@ -64,4 +63,4 @@ layer3	rno:100364062	layer4	rno:100364062	transomicsType3
 
 Then, you should have a 3D view with layered networks and transomics interactions between them.
 
-![](man/figures/4layers.jpg)
+![4layers](man/figures/4layers.jpg)
