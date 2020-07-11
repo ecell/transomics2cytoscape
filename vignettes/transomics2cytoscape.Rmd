@@ -32,19 +32,22 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Visualization of transomic networks helps biological interpretation by
-exhibiting where the signal goes [@gehlenborg_visualization_2010].
+Visualization of trans-omic networks helps biological interpretation by
+illustrating pathways where the signals are transmitted
+[@gehlenborg_visualization_2010].
 
-To understand transomics datasets, Yugi has proposed a method for network
-visualization [@yugi_reconstruction_2014] by integrating multiple pathways
-in 3D space.
+To characterize signals that go across multiple omic layers, Yugi and
+colleagues have proposed a method for network visualization
+[@yugi_reconstruction_2014] by stacking multiple 2D pathways in a 3D space.
 
-The 3D network visualization was created by VANTED [@rohn_vanted_2012]
-and manual operation.
-transomics2cytoscape automatically creates the 3D network visualization with
+The 3D network visualization was realized by VANTED [@rohn_vanted_2012].
+However, the visualization relies on time-consuming manual operation.
+Here we propose transomics2cytoscape, an R package that automatically creates
+3D network visualization in combination with
 Cytoscape [@shannon_cytoscape:_2003],
-[Cy3D](http://apps.cytoscape.org/apps/cy3d) renderer, and
+[Cy3D](http://apps.cytoscape.org/apps/cy3d) App, and
 Cytoscape Automation [@otasek_cytoscape_2019].
+
 
 ## Installation
 
@@ -83,9 +86,9 @@ The first column is the network layer ID,
 the second column is the KEGG pathway ID or an arbitrary network file,
 and the last column is the Z height of the network.
 
-### 2. A TSV file of transomic network edges between the network layers
+### 2. A TSV file of trans-omic network edges between the network layers
 
-A file that defines transomic interactions
+A file that defines trans-omic interactions
 (i.e., the edges that connect the different network layers).
 The format is as follows.
 
@@ -96,11 +99,11 @@ layer3  rno:100364062   layer4  rno:100364062   transomicsType3
 ```
 
 The 1st and 2nd columns are the information about source node of
-the transomic interaction.
+the trans-omic interaction.
 The 3rd and 4th columns are about the target node.
 The 2nd and 4th columns are the id of KEGG object or the name of
 a node in an arbitrary network file.
-The last column is the type of the transomic interaction.
+The last column is the type of the trans-omic interaction.
 
 ### 3. A style file of Cytoscape
 
