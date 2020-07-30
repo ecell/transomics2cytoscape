@@ -17,8 +17,7 @@ transomics2cytoscape automatically creates the 3D network visualization with
 
 ```{R}
 install.packages("devtools")
-Sys.setlocale(category = "LC_ALL", locale = "us")
-devtools::install_github("ecell/transomics2cytoscape", ref = "any-network-layer", build_vignettes = FALSE)
+devtools::install_github("ecell/transomics2cytoscape")
 ```
 
 and also you need to install [Cytoscape](https://cytoscape.org/).
@@ -62,5 +61,6 @@ layer3	rno:100364062	layer4	rno:100364062	transomicsType3
 ```
 
 Then, you should have a 3D view with layered networks and transomics interactions between them.
+(Note that you need to perform operations such as zooming out or adjusting the camera angle.)
 
 ![4layers](man/figures/4layers.jpg)

@@ -1,5 +1,5 @@
-# tests disabled as the Bioconductor build system does not support Cytoscape installation
-
+# # tests disabled as the Bioconductor build system does not support Cytoscape installation
+# 
 # test_that("getNodeTableWithZheight and getEdgeTable work", {
 #     tryCatch({
 #         RCy3::cytoscapePing()
@@ -8,14 +8,15 @@
 #     })
 #     pathwayID = "rno00010"
 #     zheight = 100
+#     layerIndex = "layer1"
 #     transomics2cytoscape:::getKgml(pathwayID)
-#     suID = transomics2cytoscape:::importKgml(pathwayID)
-#     nodeTable = transomics2cytoscape:::getNodeTableWithZheight(suID, zheight)
+#     suID = transomics2cytoscape:::importLayer(pathwayID)
+#     nodeTable = transomics2cytoscape:::getNodeTableWithZheight(suID, zheight, layerIndex)
 #     edgeTable = transomics2cytoscape:::getEdgeTable(suID)
-#     
+# 
 #     expect_true("KEGG_NODE_Z" %in% names(nodeTable))
 #     expect_true(all(nodeTable[, "KEGG_NODE_Z"] == 100))
-#     expect_vector(nodeTable[, "KEGG_NODE_Z"], ptype = double(), size = dim(nodeTable)[1])
+#     expect_vector(nodeTable[, "KEGG_NODE_Z"], ptype = character(), size = dim(nodeTable)[1])
 # 
 #     expect_true("source" %in% names(edgeTable))
 #     expect_true("target" %in% names(edgeTable))
