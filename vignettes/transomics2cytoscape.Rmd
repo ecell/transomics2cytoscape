@@ -20,9 +20,9 @@ knitr::opts_chunk$set(
 
 # Version Information
 
-**R version**: `r R.version.string`
+**R version**: 4.0.2
 
-**Bioconductor version**: `r BiocManager::version()`
+**Bioconductor version**: 3.11
 
 **Cytoscape**: 3.8.0
 
@@ -133,6 +133,8 @@ create3Dnetwork(networkLayers, transomicEdges, stylexml)
 
 Then, you should have a 3D view with layered networks and transomic
 interactions between them.
+(Note that you need to perform operations such as zooming out or adjusting the
+camera angle.)
 
 ![4layers](../man/figures/4layers.jpg)
 
