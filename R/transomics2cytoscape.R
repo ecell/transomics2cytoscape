@@ -65,8 +65,8 @@ checkCyApps <- function(){
         RCy3::installApp("Cy3D")
     }
     if (length(grep("KEGGScape,", apps)) == 0) {
-        message(paste("KEGGScape is not installed.",
-                "transomics2cytoscape installs KEGGScape."))
+        message("KEGGScape is not installed. ",
+                "transomics2cytoscape installs KEGGScape.")
         RCy3::installApp("KEGGscape")
     }
 }
@@ -74,18 +74,18 @@ checkCyApps <- function(){
 importLayer <- function(networkFilePath){
     fileExtension <- tools::file_ext(networkFilePath)
     if (fileExtension %in% c("sif", "gml", "xgmml", "xml")){
-        message(paste("Importing", networkFilePath))
+        message("Importing ", networkFilePath)
         suID <- RCy3::importNetworkFromFile(file = paste(getwd(), "/",
                                                     networkFilePath, sep=""))
         Sys.sleep(3)
         layer <- list("suID" = suID$networks, "isKEGG" = FALSE)
         return(layer)
     } else {
-        message(paste("transomics2cytoscape tries to import", networkFilePath,
-                    "as KEGG pathway."))
+        message("transomics2cytoscape tries to import ", networkFilePath,
+                    " as KEGG pathway.")
         getKgml(networkFilePath)
         networkFilePath <- paste(networkFilePath, ".xml", sep = "")
-        message(paste("Importing", networkFilePath))
+        message("Importing ", networkFilePath)
         suID <- RCy3::importNetworkFromFile(file = paste(getwd(), "/",
                                                     networkFilePath, sep=""))
         layer <- list("suID" = suID$networks, "isKEGG" = TRUE)
