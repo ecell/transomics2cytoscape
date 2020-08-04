@@ -55,7 +55,7 @@ This package requires [Cytoscape](https://cytoscape.org/) to be installed and
 You need to run Cytoscape before running the following R code.
 
 ```{r}
-devtools::install_github("ecell/transomics2cytoscape", build_vignettes = TRUE)
+BiocManager::install("transomics2cytoscape")
 ```
 
 # Workflow
