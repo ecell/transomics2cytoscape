@@ -4,21 +4,23 @@
 \alias{create3Dnetwork}
 \title{Create 3D network view for transomics visualization.}
 \usage{
-create3Dnetwork(networkLayers, transomicEdges, stylexml)
+create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
 }
 \arguments{
-\item{networkLayers}{A TSV file path for the 3 column rows of 
-(layer index, the network file path, Z height of the network layer)
-in 3D space.}
+\item{networkDataDir}{Path of a directory to put the network files
+of the second column of networkLayers TSV.}
 
-\item{transomicEdges}{A TSV file path for the first 5 column rows of
-(layer index of a source node, a name of source node,
-layer index of a target node, a name of target node,
-interaction type)
-representing transomic interaction edges between the network layers.}
+\item{networkLayers}{Path of a TSV file with the 3 columns (layer index,
+the network file name in networkDataDir, Z-height of the network).}
 
-\item{stylexml}{A XML file path for Cytoscape style file to be applied to
-the 3D network.}
+\item{transomicEdges}{Path of a TSV file with the 5 columns
+(layer index of a source node,
+name or KEGG object ID that the source node should have,
+layer index of a target node,
+name or KEGG object ID that the target node should have,
+interaction type).}
+
+\item{stylexml}{Path of a XML file for Cytoscape style}
 }
 \value{
 A SUID of the 3D network.
@@ -29,15 +31,16 @@ into Cy3D renderer
 }
 \examples{
 \donttest{
+networkDataDir <- tempfile(); dir.create(networkDataDir)
 sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-file.copy(sif, ".")
+file.copy(sif, networkDataDir)
 networkLayers <- system.file("extdata", "networkLayers.tsv",
     package = "transomics2cytoscape")
 transomicEdges <- system.file("extdata", "transomicEdges.tsv",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
-create3Dnetwork(networkLayers, transomicEdges, stylexml)
+create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
 }
 }
 \author{

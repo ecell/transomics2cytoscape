@@ -2,33 +2,38 @@
 ##' into Cy3D renderer
 ##'
 ##' @title Create 3D network view for transomics visualization.
-##' @param networkLayers A TSV file path for the 3 column rows of 
-##' (layer index, the network file path, Z height of the network layer)
-##' in 3D space.
-##' @param transomicEdges A TSV file path for the first 5 column rows of
-##' (layer index of a source node, a name of source node,
-##' layer index of a target node, a name of target node,
-##' interaction type)
-##' representing transomic interaction edges between the network layers.
-##' @param stylexml A XML file path for Cytoscape style file to be applied to
-##' the 3D network.
+##' @param networkDataDir Path of a directory to put the network files
+##' of the second column of networkLayers TSV.
+##' @param networkLayers Path of a TSV file with the 3 columns (layer index,
+##' the network file name in networkDataDir, Z-height of the network).
+##' @param transomicEdges Path of a TSV file with the 5 columns
+##' (layer index of a source node,
+##' name or KEGG object ID that the source node should have,
+##' layer index of a target node,
+##' name or KEGG object ID that the target node should have,
+##' interaction type).
+##' @param stylexml Path of a XML file for Cytoscape style
 ##' @return A SUID of the 3D network. 
 ##' @author Kozo Nishida
 ##' @import dplyr
 ##' @export
 ##' @examples \donttest{
+##' networkDataDir <- tempfile(); dir.create(networkDataDir)
 ##' sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-##' file.copy(sif, ".")
+##' file.copy(sif, networkDataDir)
 ##' networkLayers <- system.file("extdata", "networkLayers.tsv",
 ##'     package = "transomics2cytoscape")
 ##' transomicEdges <- system.file("extdata", "transomicEdges.tsv",
 ##'     package = "transomics2cytoscape")
 ##' stylexml <- system.file("extdata", "transomics.xml",
 ##'     package = "transomics2cytoscape")
-##' create3Dnetwork(networkLayers, transomicEdges, stylexml)
+##' create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
 ##' }
 
-create3Dnetwork <- function(networkLayers, transomicEdges, stylexml) {
+create3Dnetwork <- function(networkDataDir, networkLayers, transomicEdges,
+                            stylexml) {
+    owd <- setwd(networkDataDir)
+    on.exit(setwd(owd))
     tryCatch({
         RCy3::cytoscapePing()
     }, error = function(e) {
