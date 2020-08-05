@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 
 **Cytoscape**: 3.8.0
 
-**Cy3D (Cytoscape app)**: 1.1.2
+**Cy3D (Cytoscape app)**: 1.1.2 (or later is **required**)
 
 **KEGGscape (Cytoscape app)**: 0.8.2
 
@@ -52,28 +52,41 @@ Cytoscape Automation [@otasek_cytoscape_2019].
 ## Installation
 
 This package requires [Cytoscape](https://cytoscape.org/) to be installed and
-You need to run Cytoscape before running the following R code.
+you need to run Cytoscape before running the following R code.
 
 ```{r}
-devtools::install_github("ecell/transomics2cytoscape", build_vignettes = TRUE)
+BiocManager::install("transomics2cytoscape")
 ```
 
 # Workflow
 
 There is a function `create3Dnetwork` in transomics2cytoscape.
-In the ``create3Dnetwork`, the following workflow is executed.
+In the `create3Dnetwork`, the following workflow is executed.
 
 ![workflow_diagram](../man/figures/workflow_diagram.jpg)
 
-This function takes the following 3 input files and visualizes a 3D network
-in Cytoscape.
+`create3Dnetwork` has 4 arguments.
+
+The 1st one is a directory path where you put the network files
+to be layered in 3D space.
+The 2nd one is a file path of TSV for the Z-axis layout of the network files.
+The 3rd one is a file path of TSV used to create the edges between the network
+layers.
+The last one is a file path of XML used to style Cytoscape.
 
 ## Input files
 
-### 1. A TSV file of network layers
+### 1. (Any number of) network files to be layered in 3D space
 
-A file that defines multiple networks to be layered in 3D space.
-The format is as follows.
+Files that Cytoscape can import.
+You need to put these files in the directory of the 1st argument of
+`create3Dnetwork`.
+You don't need to put files for the KEGG pathway.
+
+### 2. A TSV file for the Z-axis layout of the network files
+
+A file that defines network layer index and the Z-height of the network
+in 3D space. The format is as follows.
 
 ```
 layer1  rno04910    600
@@ -82,11 +95,15 @@ layer3  rno00010    200
 layer4  rno00010    1
 ```
 
-The first column is the network layer ID,
-the second column is the KEGG pathway ID or an arbitrary network file,
-and the last column is the Z height of the network.
+The 1st column is the network layer index.
+This information is added to the node table column `LAYER_INDEX`.
+The 2nd column is the KEGG pathway ID or the network file name in the directory
+of the 1st argument of `create3Dnetwork`.
+You don't need to prepare a network file for the KEGG pathway.
+You can import the KEGG pathway simply by writing the KEGG pathway ID.
+The last column is the Z-height of the network.
 
-### 2. A TSV file of trans-omic network edges between the network layers
+### 3. A TSV file of trans-omic network edges between the network layers
 
 A file that defines trans-omic interactions
 (i.e., the edges that connect the different network layers).
@@ -101,11 +118,13 @@ layer3  rno:100364062   layer4  rno:100364062   transomicsType3
 The 1st and 2nd columns are the information about source node of
 the trans-omic interaction.
 The 3rd and 4th columns are about the target node.
-The 2nd and 4th columns are the id of KEGG object or the name of
-a node in an arbitrary network file.
+The 1st and 3rd columns are the network layer index.
+The 2nd and 4th columns are the name or KEGG object ID that the node should 
+have.
 The last column is the type of the trans-omic interaction.
+This information is added to the `interaction` column of the edge table.
 
-### 3. A style file of Cytoscape
+### 4. A style file of Cytoscape
 
 A Cytoscape style file.
 For more information about Cytoscape style file, see the
@@ -120,15 +139,16 @@ Note that you can only use style properties that are supported by Cy3D.
 # suppressPackageStartupMessages(library(KEGGREST))
 # Sys.setenv(LANGUAGE="en_US.UTF-8") 
 library(transomics2cytoscape)
+networkDataDir <- tempfile(); dir.create(networkDataDir)
 sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-file.copy(sif, ".")
+file.copy(sif, networkDataDir)
 networkLayers <- system.file("extdata", "networkLayers.tsv",
     package = "transomics2cytoscape")
 transomicEdges <- system.file("extdata", "transomicEdges.tsv",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
-create3Dnetwork(networkLayers, transomicEdges, stylexml)
+create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
 ```
 
 Then, you should have a 3D view with layered networks and transomic
