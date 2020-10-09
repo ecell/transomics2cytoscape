@@ -22,13 +22,13 @@ knitr::opts_chunk$set(
 
 **R version**: 4.0.2
 
-**Bioconductor version**: 3.11
+**Bioconductor version**: 3.12
 
-**Cytoscape**: 3.8.0
+**Cytoscape**: 3.8.1
 
-**Cy3D (Cytoscape app)**: 1.1.2 (or later is **required**)
+**Cy3D (Cytoscape app)**: 1.1.3 (1.1.2 or later is **required**)
 
-**KEGGscape (Cytoscape app)**: 0.8.2
+**KEGGscape (Cytoscape app)**: 0.9.0
 
 # Introduction
 
@@ -63,7 +63,7 @@ BiocManager::install("transomics2cytoscape")
 There is a function `create3Dnetwork` in transomics2cytoscape.
 In the `create3Dnetwork`, the following workflow is executed.
 
-![workflow_diagram](../man/figures/workflow_diagram.jpg)
+![workflow_diagram](../man/figures/workflow_diagram.png)
 
 `create3Dnetwork` has 4 arguments.
 

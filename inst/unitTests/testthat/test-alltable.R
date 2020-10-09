@@ -19,19 +19,22 @@ test_that("getLayeredNodes and addTransomicsEdges work", {
     layerIndices <- layerTable$V1
     nodetables <- mapply(transomics2cytoscape:::getNodeTableWithZheight, layers, networkZheights,
                          layerIndices)
-    edgetables <- lapply(layers, transomics2cytoscape:::getEdgeTable)
     layeredNodes <- transomics2cytoscape:::getLayeredNodes(nodetables)
-    allEdges <- transomics2cytoscape:::addTransomicsEdges(edgetables,
-                                transomicEdges, layeredNodes)
-    allEdges <- apply(allEdges, 2, as.character)
-
+    
     expect_equal(nrow(layeredNodes), sum(unlist(lapply(nodetables, nrow))))
-    expect_gt(nrow(allEdges), sum(unlist(lapply(edgetables, nrow))))
-
+    
+    edgetables <- lapply(layers, transomics2cytoscape:::getEdgeTable)
+    et <- dplyr::bind_rows(edgetables)
+    et["source"] = as.character(et$source)
+    et["target"] = as.character(et$target)
+    
     expect_true("id" %in% names(layeredNodes))
-    expect_true("source" %in% colnames(allEdges))
-    expect_true("target" %in% colnames(allEdges))
-
-    expect_true(all(allEdges[, "source"] %in% layeredNodes[, "id"]))
-    expect_true(all(allEdges[, "target"] %in% layeredNodes[, "id"]))
+    expect_true("source" %in% colnames(et))
+    expect_true("target" %in% colnames(et))
+    
+    suID <- RCy3::createNetworkFromDataFrames(layeredNodes, et)
+    createTransomicsEdges(suID, transomicEdges)
+    
+    newet <- RCy3::getTableColumns(table="edge")
+    expect_gt(nrow(newet), nrow(et))
 })
