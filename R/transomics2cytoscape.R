@@ -61,6 +61,7 @@ create3Dnetwork <- function(networkDataDir, networkLayers, transomicEdges,
     message("Creating transomic edges to the 3D network...")
     createTransomicsEdges(suID, transomicEdges)
     message("Finished create3Dnetwork function!")
+    return(suID)
 }
 
 createTransomicsEdges <- function(suID, transomicEdges) {
