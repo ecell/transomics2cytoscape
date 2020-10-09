@@ -17,7 +17,7 @@
 ##' @author Kozo Nishida
 ##' @import dplyr
 ##' @export
-##' @examples \donttest{
+##' @examples \dontrun{
 ##' networkDataDir <- tempfile(); dir.create(networkDataDir)
 ##' sif <- system.file("extdata","galFiltered.sif",package="RCy3")
 ##' file.copy(sif, networkDataDir)
