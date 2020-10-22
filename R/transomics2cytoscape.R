@@ -6,12 +6,6 @@
 ##' of the second column of networkLayers TSV.
 ##' @param networkLayers Path of a TSV file with the 3 columns (layer index,
 ##' the network file name in networkDataDir, Z-height of the network).
-##' @param transomicEdges Path of a TSV file with the 5 columns
-##' (layer index of a source node,
-##' name or KEGG object ID that the source node should have,
-##' layer index of a target node,
-##' name or KEGG object ID that the target node should have,
-##' interaction type).
 ##' @param stylexml Path of a XML file for Cytoscape style
 ##' @return A SUID of the 3D network. 
 ##' @author Kozo Nishida
@@ -19,15 +13,11 @@
 ##' @export
 ##' @examples \dontrun{
 ##' networkDataDir <- tempfile(); dir.create(networkDataDir)
-##' sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-##' file.copy(sif, networkDataDir)
-##' networkLayers <- system.file("extdata", "networkLayers.tsv",
-##'     package = "transomics2cytoscape")
-##' transomicEdges <- system.file("extdata", "transomicEdges.tsv",
+##' networkLayers <- system.file("extdata", "yugi2014.tsv",
 ##'     package = "transomics2cytoscape")
 ##' stylexml <- system.file("extdata", "transomics.xml",
 ##'     package = "transomics2cytoscape")
-##' create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
+##' suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
 ##' }
 
 create3Dnetwork <- function(networkDataDir, networkLayers,
@@ -64,6 +54,7 @@ create3Dnetwork <- function(networkDataDir, networkLayers,
 ##' Create Trans-Omic edges between layers of the network
 ##'
 ##' @title Create Trans-Omic edges between layers of the network.
+##' @param suid A SUID of Cytoscape network
 ##' @param transomicEdges Path of a TSV file with the 9 columns
 ##' (layer index of a source node,
 ##' name or KEGG object ID that the source node should have,
@@ -187,10 +178,15 @@ ec2reaction <- function(tsvFilePath, columnIndex, outputFilename) {
     ecVec = transomicTable[ , columnIndex]
     ecVec = unique(ecVec)
     ec2rea = KEGGREST::keggLink("reaction", ecVec)
-    foo = apply(transomicTable, 1, ecRow2reaRows, columnIndex, ec2rea)
-    bar = dplyr::select(foo, -one_of("rows"))
-    write.table(hoa, file=outputFilename, quote=FALSE, sep='\t', col.names = F,
-                row.names = F)
+    dflist = apply(transomicTable, 1, ecRow2reaRows, columnIndex, ec2rea)
+    df = dplyr::bind_rows(dflist)
+    df = dplyr::select(df, -one_of("rows"))
+    lastColumn = df[ , ncol(df)]
+    originalColumn = df[ , columnIndex]
+    df[ , columnIndex] = lastColumn
+    df[ , ncol(df)] = originalColumn
+    utils::write.table(df, file=outputFilename, quote=FALSE, sep='\t',
+                        col.names = F, row.names = F)
 }
 
 ecRow2reaRows <- function(row, columnIndex, ec2rea) {
