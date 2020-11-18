@@ -7,6 +7,8 @@
 createTransomicEdges(suid, transomicEdges)
 }
 \arguments{
+\item{suid}{A SUID of Cytoscape network}
+
 \item{transomicEdges}{Path of a TSV file with the 9 columns
 (layer index of a source node,
 name or KEGG object ID that the source node should have,

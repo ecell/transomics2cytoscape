@@ -14,13 +14,6 @@ of the second column of networkLayers TSV.}
 the network file name in networkDataDir, Z-height of the network).}
 
 \item{stylexml}{Path of a XML file for Cytoscape style}
-
-\item{transomicEdges}{Path of a TSV file with the 5 columns
-(layer index of a source node,
-name or KEGG object ID that the source node should have,
-layer index of a target node,
-name or KEGG object ID that the target node should have,
-interaction type).}
 }
 \value{
 A SUID of the 3D network.
@@ -32,15 +25,11 @@ into Cy3D renderer
 \examples{
 \dontrun{
 networkDataDir <- tempfile(); dir.create(networkDataDir)
-sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-file.copy(sif, networkDataDir)
-networkLayers <- system.file("extdata", "networkLayers.tsv",
-    package = "transomics2cytoscape")
-transomicEdges <- system.file("extdata", "transomicEdges.tsv",
+networkLayers <- system.file("extdata", "yugi2014.tsv",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
-create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
+suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
 }
 }
 \author{

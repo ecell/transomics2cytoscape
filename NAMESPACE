@@ -3,4 +3,5 @@
 export(create3Dnetwork)
 export(createTransomicEdges)
 export(ec2reaction)
+export(installCyApps)
 import(dplyr)

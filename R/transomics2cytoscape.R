@@ -30,7 +30,7 @@ create3Dnetwork <- function(networkDataDir, networkLayers,
         stop("can't connect to Cytoscape. \n
             Please check that Cytoscape is up and running.")
     })
-    checkCyApps()
+    installCyApps()
     layerTable <- utils::read.table(networkLayers)
     networkSUID = apply(layerTable, 1, importLayer2)
     layerTable <- cbind(layerTable, networkSUID)
@@ -209,7 +209,17 @@ ecRow2reaRows <- function(row, columnIndex, ec2rea) {
 #     }
 # }
 
-checkCyApps <- function(){
+##' Install the Cytoscape Apps the transomics2cytoscape depends
+##'
+##' @title Install the Cytoscape Apps the transomics2cytoscape depends.
+##' @return None
+##' @author Kozo Nishida
+##' @export
+##' @examples \dontrun{
+##' installCyApps()
+##' }
+
+installCyApps <- function(){
     apps = RCy3::getInstalledApps()
     # checking Apps
     if (length(grep("Cy3D,", apps)) == 0) {
