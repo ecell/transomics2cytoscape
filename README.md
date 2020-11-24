@@ -26,6 +26,7 @@ Cytoscape, [Cy3D App](http://apps.cytoscape.org/apps/cy3d), and
 
 ```{R}
 rm(list = ls())
+detach("package:transomics2cytoscape", unload=TRUE)
 remove.packages("transomics2cytoscape")
 install.packages("devtools")
 devtools::install_github("ecell/transomics2cytoscape", ref = "devel", upgrade = "always")
