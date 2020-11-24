@@ -55,4 +55,7 @@ suid <- createTransomicEdges(suid, transomicEdges)
 
 Then, you should have a 3D view with layered networks and transomic
 interactions between them.
+(Note that you need to perform operations such as zooming out or adjusting the
+camera angle.)
 
+![allosteric_result](man/figures/allosteric_result.png)
