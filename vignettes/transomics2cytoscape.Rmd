@@ -55,24 +55,30 @@ This package requires [Cytoscape](https://cytoscape.org/) to be installed and
 you need to run Cytoscape before running the following R code.
 
 ```{r}
+BiocManager::install(version='devel')
 BiocManager::install("transomics2cytoscape")
 ```
 
 # Workflow
 
-There is a function `create3Dnetwork` in transomics2cytoscape.
-In the `create3Dnetwork`, the following workflow is executed.
+There is two functions `create3Dnetwork` and `createTransomicEdges`
+in transomics2cytoscape.
+Below is a diagram of the workflow.
 
 ![workflow_diagram](../man/figures/workflow_diagram.png)
 
-`create3Dnetwork` has 4 arguments.
+`create3Dnetwork` has 3 arguments.
 
 The 1st one is a directory path where you put the network files
 to be layered in 3D space.
-The 2nd one is a file path of TSV for the Z-axis layout of the network files.
-The 3rd one is a file path of TSV used to create the edges between the network
-layers.
+The 2nd one is a file path of TSV for the Z-axis layout of the network files
+(called "Layer definition file").
 The last one is a file path of XML used to style Cytoscape.
+
+`createTransomicEdges` has 2 arguments.
+
+The 1st one is the SUID of the network created by `create3Dnetwork`.
+The 2nd one is a file path of TSV for the transomic interactions.
 
 ## Input files
 
@@ -83,20 +89,23 @@ You need to put these files in the directory of the 1st argument of
 `create3Dnetwork`.
 You don't need to put files for the KEGG pathway.
 
-### 2. A TSV file for the Z-axis layout of the network files
+### 2. Layer definition file
+
+"Layer definition file" is a TSV file for the Z-axis layout of the network
+files.
 
 A file that defines network layer index and the Z-height of the network
 in 3D space. The format is as follows.
 
 ```
-layer1  rno04910    600
-layer2  galFiltered.sif 400
-layer3  rno00010    200
-layer4  rno00010    1
+layer1  rno04910    2400
+layer2  rno01100    1500
+layer3  rno01100    1
 ```
 
 The 1st column is the network layer index.
 This information is added to the node table column `LAYER_INDEX`.
+
 The 2nd column is the KEGG pathway ID or the network file name in the directory
 of the 1st argument of `create3Dnetwork`.
 You don't need to prepare a network file for the KEGG pathway.
