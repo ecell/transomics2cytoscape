@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Visualization of trans-omic networks helps biological interpretation by
+Visualization of Trans-omic networks helps biological interpretation by
 illustrating pathways where the signals are transmitted
 [@gehlenborg_visualization_2010].
 
@@ -78,7 +78,8 @@ The last one is a file path of XML used to style Cytoscape.
 `createTransomicEdges` has 2 arguments.
 
 The 1st one is the SUID of the network created by `create3Dnetwork`.
-The 2nd one is a file path of TSV for the transomic interactions.
+The 2nd one is a file path of TSV for the transomic interactions
+(called "Transomic interaction file").
 
 ## Input files
 
@@ -112,33 +113,42 @@ You don't need to prepare a network file for the KEGG pathway.
 You can import the KEGG pathway simply by writing the KEGG pathway ID.
 The last column is the Z-height of the network.
 
-### 3. A TSV file of trans-omic network edges between the network layers
-
-A file that defines trans-omic interactions
-(i.e., the edges that connect the different network layers).
-The format is as follows.
-
-```
-layer1  rno:84006   layer2  YMR300C transomicsType1
-layer2  YMR300C layer3  rno:100364062   transomicsType2
-layer3  rno:100364062   layer4  rno:100364062   transomicsType3
-```
-
-The 1st and 2nd columns are the information about source node of
-the trans-omic interaction.
-The 3rd and 4th columns are about the target node.
-The 1st and 3rd columns are the network layer index.
-The 2nd and 4th columns are the name or KEGG object ID that the node should 
-have.
-The last column is the type of the trans-omic interaction.
-This information is added to the `interaction` column of the edge table.
-
-### 4. A style file of Cytoscape
+### 3. A style file of Cytoscape
 
 A Cytoscape style file.
 For more information about Cytoscape style file, see the
 [Cytoscape user manual](http://manual.cytoscape.org/en/stable/Styles.html).
 Note that you can only use style properties that are supported by Cy3D.
+
+
+### 4. Trans-omic interaction file
+
+"Trans-omic interaction file" is a TSV file that defines the edges
+that connect the different network layers.
+The format is as follows.
+
+![Transomic interaction file](../man/figures/Transomic_interaction_file.png)
+
+The 1st ~ 4th columns are the information about the node or edge 
+at the "source" of the Trans-omic interaction.
+
+The 5th ~ 8th columns are about the target node.
+
+The 1st and 5th columns are the network layer index.
+
+The 2nd and 6th columns are whether the source and target of the interaction
+are node or edge.
+
+The 3rd and 7th columns are the column name of the Cytoscape node or edge
+table.
+
+The 4th and 8th columns are the string to be searched from the column
+with the name of the 3rd and 7th column.
+The Cytoscape node or edge that has the string will be the source or target
+of the Trans-omic interaction.
+
+The last column is the type of the Trans-omic interaction.
+This information is added to the `interaction` column of the edge table.
 
 ## Example
 
@@ -149,15 +159,15 @@ Note that you can only use style properties that are supported by Cy3D.
 # Sys.setenv(LANGUAGE="en_US.UTF-8") 
 library(transomics2cytoscape)
 networkDataDir <- tempfile(); dir.create(networkDataDir)
-sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-file.copy(sif, networkDataDir)
-networkLayers <- system.file("extdata", "networkLayers.tsv",
-    package = "transomics2cytoscape")
-transomicEdges <- system.file("extdata", "transomicEdges.tsv",
+networkLayers <- system.file("extdata", "yugi2014.tsv",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
-create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
+suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
+
+transomicEdges <- system.file("extdata", "allosteric.tsv",
+    package = "transomics2cytoscape")
+suid <- createTransomicEdges(suid, transomicEdges)
 ```
 
 Then, you should have a 3D view with layered networks and transomic
@@ -165,7 +175,7 @@ interactions between them.
 (Note that you need to perform operations such as zooming out or adjusting the
 camera angle.)
 
-![4layers](../man/figures/4layers.jpg)
+![allosteric_result](../man/figures/allosteric_result.png)
 
 
 ## Session information {.unnumbered}
