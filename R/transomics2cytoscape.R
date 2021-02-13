@@ -68,7 +68,7 @@ create3Dnetwork <- function(networkDataDir, networkLayers,
 ##' @examples \dontrun{
 ##' transomicEdges <- system.file("extdata", "allosteric.tsv",
 ##'     package = "transomics2cytoscape")
-##' createTransomicEdges(suid, transomicEdges)
+##' suid <- createTransomicEdges(suid, transomicEdges)
 ##' }
 
 createTransomicEdges <- function(suid, transomicEdges) {
