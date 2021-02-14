@@ -18,31 +18,40 @@ Cytoscape, [Cy3D App](http://apps.cytoscape.org/apps/cy3d), and
 
 ## Installation
 
-```{R}
-install.packages("devtools")
-devtools::install_github("ecell/transomics2cytoscape")
-```
+1. Install R from https://cran.r-project.org/
+    1. (For Windows Users only) In addition, please download and install Rtools 4.0 from https://cran.r-project.org/bin/windows/Rtools/ 
+2. Install Cytoscape from https://cytoscape.org/
+3. Run Cytoscape.
+3. Run R and the following commands in the R console.
 
-and also you need to install [Cytoscape](https://cytoscape.org/).
+```{R}
+rm(list = ls())
+detach("package:transomics2cytoscape", unload=TRUE)
+remove.packages("transomics2cytoscape")
+install.packages("devtools")
+devtools::install_github("ecell/transomics2cytoscape", ref = "devel", upgrade = "always")
+transomics2cytoscape::installCyApps()
+```
 
 ## Example
 
-1. Run Cytoscape Desktop
-2. Run R[Studio].
+1. Run Cytoscape (If Cytoscape is already running, you don't need to run it anymore. transomics2cytoscape works only when 1 Cytoscape [window] is up.)
+2. Run R.
 3. Run the following R code. This will import multiple networks and integrate the networks to a 3D space.
 
 ```R
 library(transomics2cytoscape)
 networkDataDir <- tempfile(); dir.create(networkDataDir)
-sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-file.copy(sif, networkDataDir)
-networkLayers <- system.file("extdata", "networkLayers.tsv",
-    package = "transomics2cytoscape")
-transomicEdges <- system.file("extdata", "transomicEdges.tsv",
-    package = "transomics2cytoscape")
-stylexml <- system.file("extdata", "transomics.xml",
-    package = "transomics2cytoscape")
-create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
+networkLayers <- system.file("extdata", "yugi2014.tsv", package = "transomics2cytoscape")
+stylexml <- system.file("extdata", "transomics.xml", package = "transomics2cytoscape")
+suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
+```
+
+Next Run the following R code. This will add edges between the network layers.
+
+```
+transomicEdges <- system.file("extdata", "allosteric.tsv", package = "transomics2cytoscape")
+suid <- createTransomicEdges(suid, transomicEdges)
 ```
 
 Then, you should have a 3D view with layered networks and transomic
@@ -50,6 +59,4 @@ interactions between them.
 (Note that you need to perform operations such as zooming out or adjusting the
 camera angle.)
 
-![4layers](man/figures/4layers.jpg)
-
-Please see [./vignettes/transomics2cytoscape.Rmd](./vignettes/transomics2cytoscape.Rmd) for more information.
+![allosteric_result](man/figures/allosteric_result.png)

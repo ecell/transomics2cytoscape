@@ -4,7 +4,7 @@
 \alias{create3Dnetwork}
 \title{Create 3D network view for transomics visualization.}
 \usage{
-create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
+create3Dnetwork(networkDataDir, networkLayers, stylexml)
 }
 \arguments{
 \item{networkDataDir}{Path of a directory to put the network files
@@ -12,13 +12,6 @@ of the second column of networkLayers TSV.}
 
 \item{networkLayers}{Path of a TSV file with the 3 columns (layer index,
 the network file name in networkDataDir, Z-height of the network).}
-
-\item{transomicEdges}{Path of a TSV file with the 5 columns
-(layer index of a source node,
-name or KEGG object ID that the source node should have,
-layer index of a target node,
-name or KEGG object ID that the target node should have,
-interaction type).}
 
 \item{stylexml}{Path of a XML file for Cytoscape style}
 }
@@ -32,15 +25,11 @@ into Cy3D renderer
 \examples{
 \dontrun{
 networkDataDir <- tempfile(); dir.create(networkDataDir)
-sif <- system.file("extdata","galFiltered.sif",package="RCy3")
-file.copy(sif, networkDataDir)
-networkLayers <- system.file("extdata", "networkLayers.tsv",
-    package = "transomics2cytoscape")
-transomicEdges <- system.file("extdata", "transomicEdges.tsv",
+networkLayers <- system.file("extdata", "yugi2014.tsv",
     package = "transomics2cytoscape")
 stylexml <- system.file("extdata", "transomics.xml",
     package = "transomics2cytoscape")
-create3Dnetwork(networkDataDir, networkLayers, transomicEdges, stylexml)
+suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
 }
 }
 \author{
