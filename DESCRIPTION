@@ -1,6 +1,6 @@
 Package: transomics2cytoscape
 Title: A tool set for 3D Trans-Omic network visualization with Cytoscape
-Version: 1.1.1
+Version: 1.1.0
 Authors@R: c(
     person ("Kozo", "Nishida", email = "kozo.nishida@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8501-7319")),
