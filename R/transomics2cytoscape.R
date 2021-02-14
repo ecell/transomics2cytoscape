@@ -141,7 +141,7 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
             for (j in seq_len(length(reactionSourceNodes))){
                 targetSUID = reactionSourceNodes[[j]]
                 RCy3::addCyEdges(c(sourceSUID, targetSUID),
-                                 edgeType=as.character(transomicEdgeType))
+                                edgeType=as.character(transomicEdgeType))
             }
         }
     }
@@ -196,19 +196,6 @@ ecRow2reaRows <- function(row, columnIndex, ec2rea) {
     return(as.data.frame(cbind(rows, as.vector(rea))))
 }
 
-# createNodeForEdge <- function(edgeInfo){
-#     sourceNodeSUID = edgeInfo$source
-#     targetNodeSUID = edgeInfo$target
-#     theName = paste(as.character(sourceNodeSUID), as.character(targetNodeSUID))
-#     newNodeInfo = RCy3::addCyNodes(theName, skip.duplicate.names = TRUE)
-#     if (length(newNodeInfo) > 0) {
-#         newNodeSUID = newNodeInfo[[1]]$SUID
-#         # RCy3::addCyEdges(list(c(sourceNodeSUID, newNodeSUID),
-#         #                       c(newNodeSUID, targetNodeSUID)))
-#         return(c(newNodeSUID, sourceNodeSUID, targetNodeSUID))    
-#     }
-# }
-
 ##' Install the Cytoscape Apps the transomics2cytoscape depends
 ##'
 ##' @title Install the Cytoscape Apps the transomics2cytoscape depends.
@@ -237,7 +224,7 @@ importLayer2 <- function(row){
     fileExtension <- tools::file_ext(row[2])
     if (fileExtension %in% c("sif", "gml", "xgmml", "xml")){
         res <- RCy3::importNetworkFromFile(file = paste(getwd(), "/",
-                                                         row[2], sep=""))
+                                                        row[2], sep=""))
         Sys.sleep(3)
         networkSUID = res$networks
         return(networkSUID)
@@ -246,7 +233,7 @@ importLayer2 <- function(row){
         kgml <- paste(row[2], ".xml", sep = "")
         message("Importing ", kgml)
         res <- RCy3::importNetworkFromFile(file = paste(getwd(), "/",
-                                                         kgml, sep=""))
+                                                        kgml, sep=""))
         Sys.sleep(3)
         RCy3::setVisualStyle("KEGG Style")
         RCy3::fitContent()
