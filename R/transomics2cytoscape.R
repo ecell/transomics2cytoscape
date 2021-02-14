@@ -186,7 +186,7 @@ ec2reaction <- function(tsvFilePath, columnIndex, outputFilename) {
     df[ , columnIndex] = lastColumn
     df[ , ncol(df)] = originalColumn
     utils::write.table(df, file=outputFilename, quote=FALSE, sep='\t',
-                        col.names = F, row.names = F)
+                        col.names = FALSE, row.names = FALSE)
 }
 
 ecRow2reaRows <- function(row, columnIndex, ec2rea) {
