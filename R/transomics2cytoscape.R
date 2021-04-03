@@ -269,8 +269,11 @@ importLayer2 <- function(row){
         res <- RCy3::importNetworkFromFile(file = paste(getwd(), "/",
                                                         row[2], sep=""))
         Sys.sleep(3)
-        networkSUID = res$networks
-        return(networkSUID)
+        nodePositions <- RCy3::getNodePosition(network = res$networks)
+        names(nodePositions)[1] <- "KEGG_NODE_X"
+        names(nodePositions)[2] <- "KEGG_NODE_Y"
+        RCy3::loadTableData(nodePositions, network = res$networks)
+        return(res$networks)
     } else {
         getKgml(row[2])
         kgml <- paste(row[2], ".xml", sep = "")
