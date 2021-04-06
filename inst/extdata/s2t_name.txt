@@ -1,0 +1,3 @@
+﻿mmu:11651        V$CREB1_Q6        CREB1        2
+mmu:26413        V$CREB1_Q6        CREB1        1
+mmu:11651        V$FOXO1_08        FOXO1A        2
