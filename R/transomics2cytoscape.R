@@ -99,33 +99,42 @@ createTransomicEdge <- function(row, nt, et, addedEdges, suid) {
                         sourceTableColumnName, et, targetLayerIndex,
                         targetTableValue, targetTableColumnName,
                         transomicEdgeType, addedEdges, suid)
+    } else if (sourceTableType == "node" && targetTableType == "node"){
+        addedEdges = createNode2Node(nt, sourceLayerIndex, sourceTableValue,
+                                     sourceTableColumnName, targetLayerIndex,
+                                     targetTableValue, targetTableColumnName,
+                                     transomicEdgeType, addedEdges)
     }
     return(addedEdges)
-    
-    # if (sourceTableType == "node") {
-    #     layerNt = dplyr::filter(nt, LAYER_INDEX == sourceLayerIndex)
-    #     sourceNodeRows = dplyr::filter(layerNt, grepl(sourceTableValue,
-    #                                     !!as.name(sourceTableColumnName)))
-    #     if (targetTableType == "edge") {
-    #         layerEt = dplyr::filter(et, LAYER_INDEX == targetLayerIndex)
-    #         targetEdgeRows = dplyr::filter(layerEt, grepl(targetTableValue,
-    #                                     !!as.name(targetTableColumnName)))
-    #         if (nrow(targetEdgeRows) > 0) {
-    #             ei = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
-    #             #centerNodes = lapply(ei, createNodeForEdge)
-    #             reactionSourceNodes = lapply(ei, getEdgeSourceSUID)
-    #             
-    #             for (i in seq_len(nrow(sourceNodeRows))){
-    #                 sourceSUID = sourceNodeRows[i, 1]
-    #                 for (j in seq_len(length(reactionSourceNodes))){
-    #                     targetSUID = reactionSourceNodes[[j]]
-    #                     RCy3::addCyEdges(c(sourceSUID, targetSUID),
-    #                         edgeType=as.character(transomicEdgeType))
-    #                 }
-    #             }
-    #         }
-    #     }
-    # }
+}
+
+createNode2Node <- function(nt, sourceLayerIndex, sourceTableValue,
+                            sourceTableColumnName, targetLayerIndex,
+                            targetTableValue, targetTableColumnName,
+                            transomicEdgeType, addedEdges) {
+    sourceLayerNt = dplyr::filter(nt, LAYER_INDEX == sourceLayerIndex)
+    sourceNodeRows = dplyr::filter(sourceLayerNt, grepl(sourceTableValue,
+                                    !!as.name(sourceTableColumnName)))
+    targetLayerNt = dplyr::filter(nt, LAYER_INDEX == targetLayerIndex)
+    targetNodeRows = dplyr::filter(targetLayerNt, grepl(targetTableValue,
+                                    !!as.name(targetTableColumnName),
+                                    fixed = TRUE))
+    if (nrow(targetNodeRows) > 0) {
+        #print(foo)
+        for (i in seq_len(nrow(sourceNodeRows))) {
+            sourceSUID = sourceNodeRows[i, 1]
+            for (j in seq_len(nrow(targetNodeRows))){
+                targetSUID = targetNodeRows[j, 1]
+                if (!(list(c(sourceSUID, targetSUID)) %in% addedEdges)) {
+                    addedEdges = append(addedEdges,
+                                        list(c(sourceSUID, targetSUID)))
+                    RCy3::addCyEdges(c(sourceSUID, targetSUID),
+                                    edgeType=as.character(transomicEdgeType))
+                }
+            }
+        }
+    }
+    return(addedEdges)
 }
 
 createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
@@ -152,7 +161,8 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
                 targetSUID = midpointNodes[[j]]
                 #print(targetSUID)
                 if (!(list(c(sourceSUID, targetSUID)) %in% addedEdges)) {
-                    addedEdges = append(addedEdges, list(c(sourceSUID, targetSUID)))
+                    addedEdges = append(addedEdges,
+                                        list(c(sourceSUID, targetSUID)))
                     RCy3::addCyEdges(c(sourceSUID, targetSUID),
                                      edgeType=as.character(transomicEdgeType))
                 }
