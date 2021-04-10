@@ -114,7 +114,8 @@ createNode2Node <- function(nt, sourceLayerIndex, sourceTableValue,
                             transomicEdgeType, addedEdges) {
     sourceLayerNt = dplyr::filter(nt, LAYER_INDEX == sourceLayerIndex)
     sourceNodeRows = dplyr::filter(sourceLayerNt, grepl(sourceTableValue,
-                                    !!as.name(sourceTableColumnName)))
+                                    !!as.name(sourceTableColumnName),
+                                    fixed = TRUE))
     targetLayerNt = dplyr::filter(nt, LAYER_INDEX == targetLayerIndex)
     targetNodeRows = dplyr::filter(targetLayerNt, grepl(targetTableValue,
                                     !!as.name(targetTableColumnName),
@@ -143,10 +144,12 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
                             transomicEdgeType, addedEdges, suid){
     layerNt = dplyr::filter(nt, LAYER_INDEX == sourceLayerIndex)
     sourceNodeRows = dplyr::filter(layerNt, grepl(sourceTableValue,
-                                    !!as.name(sourceTableColumnName)))
+                                    !!as.name(sourceTableColumnName),
+                                    fixed = TRUE))
     layerEt = dplyr::filter(et, LAYER_INDEX == targetLayerIndex)
     targetEdgeRows = dplyr::filter(layerEt, grepl(targetTableValue,
-                                    !!as.name(targetTableColumnName)))
+                                    !!as.name(targetTableColumnName),
+                                    fixed = TRUE))
     if (nrow(targetEdgeRows) > 0) {
         ei = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
         midpointNodes = lapply(ei, getMidpointNodeSUID, suid)
