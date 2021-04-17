@@ -81,7 +81,7 @@ createTransomicEdges <- function(suid, transomicEdges) {
         addedEdges = createTransomicEdge(row, nt, et, addedEdges, suid)
     }
     #apply(transomicTable, 1, createTransomicEdge, nt, et)
-    return(addedEdges)
+    return(suid)
 }
 
 createTransomicEdge <- function(row, nt, et, addedEdges, suid) {
@@ -153,7 +153,6 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
     if (nrow(targetEdgeRows) > 0) {
         ei = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
         midpointNodes = lapply(ei, getMidpointNodeSUID, suid)
-        #print(midpointNodes)
         #reactionSourceNodes = lapply(ei, getEdgeSourceSUID)
         # get info about not only source node but also target
         for (i in seq_len(nrow(sourceNodeRows))){
@@ -162,7 +161,6 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
             for (j in seq_len(length(midpointNodes))){
                 #targetSUID = reactionSourceNodes[[j]]
                 targetSUID = midpointNodes[[j]]
-                #print(targetSUID)
                 if (!(list(c(sourceSUID, targetSUID)) %in% addedEdges)) {
                     addedEdges = append(addedEdges,
                                         list(c(sourceSUID, targetSUID)))
@@ -183,7 +181,6 @@ getEdgeSourceSUID <- function(edgeInfo){
 getMidpointNodeSUID <- function(edgeInfo, suid){
     sourceNodeSUID = edgeInfo$source
     targetNodeSUID = edgeInfo$target
-    #print(suid)
     sourceNodeX = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
                                   'rows',sourceNodeSUID,'KEGG_NODE_X',sep="/"))
     targetNodeX = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
@@ -196,10 +193,7 @@ getMidpointNodeSUID <- function(edgeInfo, suid){
     midNodeY = (as.numeric(sourceNodeY) + as.numeric(targetNodeY)) / 2
     midNodeZ = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
                                'rows',sourceNodeSUID,'KEGG_NODE_Z',sep="/"))
-    #print(edgeInfo$SUID)
-    #n = addCyNodes(edgeInfo$name)
     n = RCy3::addCyNodes(edgeInfo$SUID)
-    #print(n)
     midNodeSUID = n[[1]]$SUID
     RCy3::commandsPOST(paste0('node set attribute',
                         ' columnList=KEGG_NODE_X,KEGG_NODE_Y,KEGG_NODE_Z',
@@ -339,7 +333,7 @@ getLayeredNodes <- function(nodetables){
 }
 
 setTransomicStyle <- function(xml, suid){
-    RCy3::importVisualStyles(filename = xml)
-    RCy3::setVisualStyle("transomics", network = suid)
-    message("Set visual style to 'transomics'")
+    stylename = RCy3::importVisualStyles(filename = xml)
+    RCy3::setVisualStyle(stylename, network = suid)
+    message(paste("Set visual style to", stylename))
 }
