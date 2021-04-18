@@ -76,7 +76,7 @@ createTransomicEdges <- function(suid, transomicEdges) {
     nt = RCy3::getTableColumns(table = "node", network = suid)
     et = RCy3::getTableColumns(table = "edge", network = suid)
     addedEdges = list()
-    for (i in 1:nrow(transomicTable)) {
+    for (i in seq_len(nrow(transomicTable))) {
         row = transomicTable[i,]
         addedEdges = createTransomicEdge(row, nt, et, addedEdges, suid)
     }
@@ -101,9 +101,9 @@ createTransomicEdge <- function(row, nt, et, addedEdges, suid) {
                         transomicEdgeType, addedEdges, suid)
     } else if (sourceTableType == "node" && targetTableType == "node"){
         addedEdges = createNode2Node(nt, sourceLayerIndex, sourceTableValue,
-                                     sourceTableColumnName, targetLayerIndex,
-                                     targetTableValue, targetTableColumnName,
-                                     transomicEdgeType, addedEdges)
+                                    sourceTableColumnName, targetLayerIndex,
+                                    targetTableValue, targetTableColumnName,
+                                    transomicEdgeType, addedEdges)
     }
     return(addedEdges)
 }
@@ -165,7 +165,7 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
                     addedEdges = append(addedEdges,
                                         list(c(sourceSUID, targetSUID)))
                     RCy3::addCyEdges(c(sourceSUID, targetSUID),
-                                     edgeType=as.character(transomicEdgeType))
+                                    edgeType=as.character(transomicEdgeType))
                 }
             }
         }
@@ -182,17 +182,17 @@ getMidpointNodeSUID <- function(edgeInfo, suid){
     sourceNodeSUID = edgeInfo$source
     targetNodeSUID = edgeInfo$target
     sourceNodeX = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
-                                  'rows',sourceNodeSUID,'KEGG_NODE_X',sep="/"))
+                                'rows',sourceNodeSUID,'KEGG_NODE_X',sep="/"))
     targetNodeX = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
-                                  'rows',targetNodeSUID,'KEGG_NODE_X',sep="/"))
+                                'rows',targetNodeSUID,'KEGG_NODE_X',sep="/"))
     midNodeX = (as.numeric(sourceNodeX) + as.numeric(targetNodeX)) / 2
     sourceNodeY = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
-                                  'rows',sourceNodeSUID,'KEGG_NODE_Y',sep="/"))
+                                'rows',sourceNodeSUID,'KEGG_NODE_Y',sep="/"))
     targetNodeY = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
-                                  'rows',targetNodeSUID,'KEGG_NODE_Y',sep="/"))
+                                'rows',targetNodeSUID,'KEGG_NODE_Y',sep="/"))
     midNodeY = (as.numeric(sourceNodeY) + as.numeric(targetNodeY)) / 2
     midNodeZ = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
-                               'rows',sourceNodeSUID,'KEGG_NODE_Z',sep="/"))
+                                'rows',sourceNodeSUID,'KEGG_NODE_Z',sep="/"))
     n = RCy3::addCyNodes(edgeInfo$SUID)
     midNodeSUID = n[[1]]$SUID
     RCy3::commandsPOST(paste0('node set attribute',
