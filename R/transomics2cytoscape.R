@@ -75,81 +75,131 @@ createTransomicEdges <- function(suid, transomicEdges) {
     transomicTable <- utils::read.table(transomicEdges)
     nt = RCy3::getTableColumns(table = "node", network = suid)
     et = RCy3::getTableColumns(table = "edge", network = suid)
-    apply(transomicTable, 1, createTransomicEdge, nt, et)
+    addedEdges = list()
+    for (i in seq_len(nrow(transomicTable))) {
+        row = transomicTable[i,]
+        addedEdges = createTransomicEdge(row, nt, et, addedEdges, suid)
+    }
+    #apply(transomicTable, 1, createTransomicEdge, nt, et)
     return(suid)
 }
 
-createTransomicEdge <- function(row, nt, et) {
-    sourceLayerIndex = row[1]
-    sourceTableType = row[2]
-    sourceTableColumnName = row[3]
-    sourceTableValue = row[4]
-    targetLayerIndex = row[5]
-    targetTableType = row[6]
-    targetTableColumnName = row[7]
-    targetTableValue = row[8]
-    transomicEdgeType= row[9]
+createTransomicEdge <- function(row, nt, et, addedEdges, suid) {
+    sourceLayerIndex = as.character(row[1])
+    sourceTableType = as.character(row[2])
+    sourceTableColumnName = as.character(row[3])
+    sourceTableValue = as.character(row[4])
+    targetLayerIndex = as.character(row[5])
+    targetTableType = as.character(row[6])
+    targetTableColumnName = as.character(row[7])
+    targetTableValue = as.character(row[8])
+    transomicEdgeType= as.character(row[9])
     if (sourceTableType == "node" && targetTableType == "edge"){
-        createNode2Edge(nt, sourceLayerIndex, sourceTableValue,
+        addedEdges = createNode2Edge(nt, sourceLayerIndex, sourceTableValue,
                         sourceTableColumnName, et, targetLayerIndex,
                         targetTableValue, targetTableColumnName,
-                        transomicEdgeType)
+                        transomicEdgeType, addedEdges, suid)
+    } else if (sourceTableType == "node" && targetTableType == "node"){
+        addedEdges = createNode2Node(nt, sourceLayerIndex, sourceTableValue,
+                                    sourceTableColumnName, targetLayerIndex,
+                                    targetTableValue, targetTableColumnName,
+                                    transomicEdgeType, addedEdges)
     }
-    
-    # if (sourceTableType == "node") {
-    #     layerNt = dplyr::filter(nt, LAYER_INDEX == sourceLayerIndex)
-    #     sourceNodeRows = dplyr::filter(layerNt, grepl(sourceTableValue,
-    #                                     !!as.name(sourceTableColumnName)))
-    #     if (targetTableType == "edge") {
-    #         layerEt = dplyr::filter(et, LAYER_INDEX == targetLayerIndex)
-    #         targetEdgeRows = dplyr::filter(layerEt, grepl(targetTableValue,
-    #                                     !!as.name(targetTableColumnName)))
-    #         if (nrow(targetEdgeRows) > 0) {
-    #             ei = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
-    #             #centerNodes = lapply(ei, createNodeForEdge)
-    #             reactionSourceNodes = lapply(ei, getEdgeSourceSUID)
-    #             
-    #             for (i in seq_len(nrow(sourceNodeRows))){
-    #                 sourceSUID = sourceNodeRows[i, 1]
-    #                 for (j in seq_len(length(reactionSourceNodes))){
-    #                     targetSUID = reactionSourceNodes[[j]]
-    #                     RCy3::addCyEdges(c(sourceSUID, targetSUID),
-    #                         edgeType=as.character(transomicEdgeType))
-    #                 }
-    #             }
-    #         }
-    #     }
-    # }
+    return(addedEdges)
+}
+
+createNode2Node <- function(nt, sourceLayerIndex, sourceTableValue,
+                            sourceTableColumnName, targetLayerIndex,
+                            targetTableValue, targetTableColumnName,
+                            transomicEdgeType, addedEdges) {
+    sourceLayerNt = dplyr::filter(nt, LAYER_INDEX == sourceLayerIndex)
+    sourceNodeRows = dplyr::filter(sourceLayerNt, grepl(sourceTableValue,
+                                    !!as.name(sourceTableColumnName),
+                                    fixed = TRUE))
+    targetLayerNt = dplyr::filter(nt, LAYER_INDEX == targetLayerIndex)
+    targetNodeRows = dplyr::filter(targetLayerNt, grepl(targetTableValue,
+                                    !!as.name(targetTableColumnName),
+                                    fixed = TRUE))
+    if (nrow(targetNodeRows) > 0) {
+        #print(foo)
+        for (i in seq_len(nrow(sourceNodeRows))) {
+            sourceSUID = sourceNodeRows[i, 1]
+            for (j in seq_len(nrow(targetNodeRows))){
+                targetSUID = targetNodeRows[j, 1]
+                if (!(list(c(sourceSUID, targetSUID)) %in% addedEdges)) {
+                    addedEdges = append(addedEdges,
+                                        list(c(sourceSUID, targetSUID)))
+                    RCy3::addCyEdges(c(sourceSUID, targetSUID),
+                                    edgeType=as.character(transomicEdgeType))
+                }
+            }
+        }
+    }
+    return(addedEdges)
 }
 
 createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
                             sourceTableColumnName, et, targetLayerIndex,
                             targetTableValue, targetTableColumnName,
-                            transomicEdgeType){
+                            transomicEdgeType, addedEdges, suid){
     layerNt = dplyr::filter(nt, LAYER_INDEX == sourceLayerIndex)
     sourceNodeRows = dplyr::filter(layerNt, grepl(sourceTableValue,
-                                    !!as.name(sourceTableColumnName)))
+                                    !!as.name(sourceTableColumnName),
+                                    fixed = TRUE))
     layerEt = dplyr::filter(et, LAYER_INDEX == targetLayerIndex)
     targetEdgeRows = dplyr::filter(layerEt, grepl(targetTableValue,
-                                    !!as.name(targetTableColumnName)))
+                                    !!as.name(targetTableColumnName),
+                                    fixed = TRUE))
     if (nrow(targetEdgeRows) > 0) {
         ei = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
-        #centerNodes = lapply(ei, createNodeForEdge)
-        reactionSourceNodes = lapply(ei, getEdgeSourceSUID)
+        midpointNodes = lapply(ei, getMidpointNodeSUID, suid)
+        #reactionSourceNodes = lapply(ei, getEdgeSourceSUID)
+        # get info about not only source node but also target
         for (i in seq_len(nrow(sourceNodeRows))){
             sourceSUID = sourceNodeRows[i, 1]
-            for (j in seq_len(length(reactionSourceNodes))){
-                targetSUID = reactionSourceNodes[[j]]
-                RCy3::addCyEdges(c(sourceSUID, targetSUID),
-                                edgeType=as.character(transomicEdgeType))
+            #for (j in seq_len(length(reactionSourceNodes))){
+            for (j in seq_len(length(midpointNodes))){
+                #targetSUID = reactionSourceNodes[[j]]
+                targetSUID = midpointNodes[[j]]
+                if (!(list(c(sourceSUID, targetSUID)) %in% addedEdges)) {
+                    addedEdges = append(addedEdges,
+                                        list(c(sourceSUID, targetSUID)))
+                    RCy3::addCyEdges(c(sourceSUID, targetSUID),
+                                    edgeType=as.character(transomicEdgeType))
+                }
             }
         }
     }
+    return(addedEdges)
 }
 
 getEdgeSourceSUID <- function(edgeInfo){
     sourceNodeSUID = edgeInfo$source
     return(sourceNodeSUID)
+}
+
+getMidpointNodeSUID <- function(edgeInfo, suid){
+    sourceNodeSUID = edgeInfo$source
+    targetNodeSUID = edgeInfo$target
+    sourceNodeX = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
+                                'rows',sourceNodeSUID,'KEGG_NODE_X',sep="/"))
+    targetNodeX = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
+                                'rows',targetNodeSUID,'KEGG_NODE_X',sep="/"))
+    midNodeX = (as.numeric(sourceNodeX) + as.numeric(targetNodeX)) / 2
+    sourceNodeY = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
+                                'rows',sourceNodeSUID,'KEGG_NODE_Y',sep="/"))
+    targetNodeY = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
+                                'rows',targetNodeSUID,'KEGG_NODE_Y',sep="/"))
+    midNodeY = (as.numeric(sourceNodeY) + as.numeric(targetNodeY)) / 2
+    midNodeZ = RCy3::cyrestGET(paste('networks',suid,'tables','defaultnode',
+                                'rows',sourceNodeSUID,'KEGG_NODE_Z',sep="/"))
+    n = RCy3::addCyNodes(edgeInfo$SUID)
+    midNodeSUID = n[[1]]$SUID
+    RCy3::commandsPOST(paste0('node set attribute',
+                        ' columnList=KEGG_NODE_X,KEGG_NODE_Y,KEGG_NODE_Z',
+                        ' nodeList=SUID:', midNodeSUID,
+                        ' valueList=', midNodeX, ',', midNodeY, ',', midNodeZ))
+    return(midNodeSUID)
 }
 
 ##' Convert KEGG enzyme IDs to KEGG reaction IDs
@@ -226,8 +276,11 @@ importLayer2 <- function(row){
         res <- RCy3::importNetworkFromFile(file = paste(getwd(), "/",
                                                         row[2], sep=""))
         Sys.sleep(3)
-        networkSUID = res$networks
-        return(networkSUID)
+        nodePositions <- RCy3::getNodePosition(network = res$networks)
+        names(nodePositions)[1] <- "KEGG_NODE_X"
+        names(nodePositions)[2] <- "KEGG_NODE_Y"
+        RCy3::loadTableData(nodePositions, network = res$networks)
+        return(res$networks)
     } else {
         getKgml(row[2])
         kgml <- paste(row[2], ".xml", sep = "")
@@ -280,7 +333,7 @@ getLayeredNodes <- function(nodetables){
 }
 
 setTransomicStyle <- function(xml, suid){
-    RCy3::importVisualStyles(filename = xml)
-    RCy3::setVisualStyle("transomics", network = suid)
-    message("Set visual style to 'transomics'")
+    stylename = RCy3::importVisualStyles(filename = xml)
+    RCy3::setVisualStyle(stylename, network = suid)
+    message(paste("Set visual style to", stylename))
 }
