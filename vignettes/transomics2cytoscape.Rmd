@@ -64,7 +64,7 @@ There is 2 functions `create3Dnetwork` and `createTransomicEdges`
 in transomics2cytoscape.
 Below is a diagram of the transomics2cytoscape workflow.
 
-![workflow_diagram](../man/figures/workflow_diagram.png)
+![Figure 1. The transomics2cytoscape workflow](../man/figures/workflow_diagram.png)
 
 `create3Dnetwork` has 3 arguments.
 
@@ -74,15 +74,25 @@ The 2nd one is a file path of TSV for the Z-axis layout of the network files
 (called "Layer definition file").
 The last one is a file path of XML used to style Cytoscape.
 
+For example,
+```
+suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
+```
+
 `createTransomicEdges` has 2 arguments.
 
 The 1st one is the SUID of the network created by `create3Dnetwork`.
 The 2nd one is a file path of TSV for the transomic interactions
 (called "Transomic interaction file").
 
+For example,
+```
+suid <- createTransomicEdges(suid, layer1to2)
+```
+
 ## Input files
 
-### 1. (Any number of) network files to be layered in 3D space
+### (Any number of) network files to be layered in 3D space
 
 Files that Cytoscape can import.
 You need to put these files in the directory of the 1st argument of
@@ -91,7 +101,7 @@ You don't need to put files for the KEGG pathway.
 For KEGG pathway, you can import the network just by writing the KEGG
 pathway ID in the "Layer definition file" described later.
 
-### 2. Layer definition file
+### Layer definition file
 
 "Layer definition file" is a TSV file for the Z-axis layout of the network
 files.
@@ -114,7 +124,7 @@ You don't need to prepare a network file for the KEGG pathway.
 You can import the KEGG pathway simply by writing the KEGG pathway ID.
 The last column is the Z-height of the network.
 
-### 3. A style file of Cytoscape
+### A style file of Cytoscape
 
 A Cytoscape style file.
 For more information about Cytoscape style file, see the
@@ -122,13 +132,13 @@ For more information about Cytoscape style file, see the
 Note that you can only use style properties that are supported by Cy3D.
 
 
-### 4. Trans-omic interaction file
+### Trans-omic interaction file
 
 "Trans-omic interaction file" is a TSV file that defines the edges
 that connect the different network layers.
 The format is as follows.
 
-![Transomic interaction file](../man/figures/Transomic_interaction_file.png)
+![Figure 2. Trans-omic interaction file](../man/figures/Transomic_interaction_file.png)
 
 The 1st ~ 4th columns are the information about the node or edge 
 at the "source" of the Trans-omic interaction.
@@ -186,7 +196,29 @@ interactions between them.
 (Note that you need to perform operations such as zooming out or adjusting the
 camera angle.)
 
-![allosteric_result](../man/figures/allosteric_result.png)
+![Figure 3. Reproduction of Yugi's Trans-omics visualizaion (Yugi 2014)](../man/figures/allosteric_result.png)
+
+# Conversion from EC number to KEGG reaction ID
+
+For those who have seen the enzyme reaction database such as
+[BRENDA](https://www.brenda-enzymes.org/) [@chang_brenda_2021],
+it is not intuitive that the ID of the allosteric regulatory target
+(8th column of the `allosteric.tsv`)
+is the ID of the metabolic reaction rather than the EC number.
+
+This is because KEGG uses the reaction ID instead of the EC number as the ID of
+the pathway object of the global metabolism map.
+
+So transomics2cytoscape has a function `ec2reaction` that converts the EC number
+column of the Trans-omic interaction file into the KEGG reaction ID.
+
+![Figure 4. How the ec2reaction function works](../man/figures/ec2reaction.png)
+
+```{r}
+ecnum <- system.file("extdata", "allosteric_ecnumber.tsv",
+    package = "transomics2cytoscape")
+ec2reaction(ecnum, 8, "allosteric.tsv")
+```
 
 
 # References
