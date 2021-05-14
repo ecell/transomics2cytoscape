@@ -43,12 +43,6 @@ create3Dnetwork <- function(networkDataDir, networkLayers,
     suID <- RCy3::createNetworkFromDataFrames(layeredNodes, layeredEdges)
     setTransomicStyle(stylexml, suID)
     return(suID)
-    # suID <- RCy3::createNetworkFromDataFrames(layeredNodes, layeredEdges)
-    
-    # 
-    #message("Creating transomic edges to the 3D network...")
-    #createTransomicsEdges(suID, transomicEdges)
-    #message("Finished create3Dnetwork function!")
 }
 
 ##' Create Trans-Omic edges between layers of the network
@@ -80,7 +74,6 @@ createTransomicEdges <- function(suid, transomicEdges) {
         row = transomicTable[i,]
         addedEdges = createTransomicEdge(row, nt, et, addedEdges, suid)
     }
-    #apply(transomicTable, 1, createTransomicEdge, nt, et)
     return(suid)
 }
 
@@ -101,9 +94,14 @@ createTransomicEdge <- function(row, nt, et, addedEdges, suid) {
                         transomicEdgeType, addedEdges, suid)
     } else if (sourceTableType == "node" && targetTableType == "node"){
         addedEdges = createNode2Node(nt, sourceLayerIndex, sourceTableValue,
-                                    sourceTableColumnName, targetLayerIndex,
-                                    targetTableValue, targetTableColumnName,
-                                    transomicEdgeType, addedEdges)
+                        sourceTableColumnName, targetLayerIndex,
+                        targetTableValue, targetTableColumnName,
+                        transomicEdgeType, addedEdges)
+    } else if (sourceTableType == "edge" && targetTableType == "edge"){
+        addedEdges = createEdge2Edge(et, sourceLayerIndex, sourceTableValue,
+                        sourceTableColumnName, targetLayerIndex,
+                        targetTableValue, targetTableColumnName,
+                        transomicEdgeType, addedEdges, suid)
     }
     return(addedEdges)
 }
@@ -121,7 +119,6 @@ createNode2Node <- function(nt, sourceLayerIndex, sourceTableValue,
                                     !!as.name(targetTableColumnName),
                                     fixed = TRUE))
     if (nrow(targetNodeRows) > 0) {
-        #print(foo)
         for (i in seq_len(nrow(sourceNodeRows))) {
             sourceSUID = sourceNodeRows[i, 1]
             for (j in seq_len(nrow(targetNodeRows))){
@@ -153,13 +150,9 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
     if (nrow(targetEdgeRows) > 0) {
         ei = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
         midpointNodes = lapply(ei, getMidpointNodeSUID, suid)
-        #reactionSourceNodes = lapply(ei, getEdgeSourceSUID)
-        # get info about not only source node but also target
         for (i in seq_len(nrow(sourceNodeRows))){
             sourceSUID = sourceNodeRows[i, 1]
-            #for (j in seq_len(length(reactionSourceNodes))){
             for (j in seq_len(length(midpointNodes))){
-                #targetSUID = reactionSourceNodes[[j]]
                 targetSUID = midpointNodes[[j]]
                 if (!(list(c(sourceSUID, targetSUID)) %in% addedEdges)) {
                     addedEdges = append(addedEdges,
@@ -171,6 +164,38 @@ createNode2Edge <- function(nt, sourceLayerIndex, sourceTableValue,
         }
     }
     return(addedEdges)
+}
+
+createEdge2Edge <- function(et, sourceLayerIndex, sourceTableValue,
+                            sourceTableColumnName, targetLayerIndex,
+                            targetTableValue, targetTableColumnName,
+                            transomicEdgeType, addedEdges, suid) {
+    sourceLayerEt= dplyr::filter(et, LAYER_INDEX == sourceLayerIndex)
+    targetLayerEt = dplyr::filter(et, LAYER_INDEX == targetLayerIndex)
+    sourceEdgeRows = dplyr::filter(sourceLayerEt, grepl(sourceTableValue,
+                                            !!as.name(sourceTableColumnName),
+                                            fixed = TRUE))
+    targetEdgeRows = dplyr::filter(targetLayerEt, grepl(targetTableValue,
+                                            !!as.name(targetTableColumnName),
+                                            fixed = TRUE))
+    if (nrow(sourceEdgeRows) > 0 && nrow(targetEdgeRows) > 0) {
+        sourceEi = RCy3::getEdgeInfo(sourceEdgeRows["SUID"])
+        sourceMidpointNodes = lapply(sourceEi, getMidpointNodeSUID, suid)
+        targetEi = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
+        targetMidpointNodes = lapply(targetEi, getMidpointNodeSUID, suid)
+        for (i in seq_len(length(sourceMidpointNodes))){
+            sourceSUID = sourceMidpointNodes[[i]]
+            for (j in seq_len(length(targetMidpointNodes))) {
+                targetSUID = targetMidpointNodes[[j]]
+                if (!(list(c(sourceSUID, targetSUID)) %in% addedEdges)) {
+                    addedEdges = append(addedEdges,
+                                        list(c(sourceSUID, targetSUID)))
+                    RCy3::addCyEdges(c(sourceSUID, targetSUID),
+                                edgeType=as.character(transomicEdgeType))
+                }
+            }
+        }
+    }
 }
 
 getEdgeSourceSUID <- function(edgeInfo){
@@ -224,19 +249,7 @@ getMidpointNodeSUID <- function(edgeInfo, suid){
 ##' }
 
 ec2reaction <- function(tsvFilePath, columnIndex, outputFilename) {
-    transomicTable = utils::read.table(tsvFilePath)
-    ecVec = transomicTable[ , columnIndex]
-    ecVec = unique(ecVec)
-    ec2rea = KEGGREST::keggLink("reaction", ecVec)
-    dflist = apply(transomicTable, 1, ecRow2reaRows, columnIndex, ec2rea)
-    df = dplyr::bind_rows(dflist)
-    df = dplyr::select(df, -one_of("rows"))
-    lastColumn = df[ , ncol(df)]
-    originalColumn = df[ , columnIndex]
-    df[ , columnIndex] = lastColumn
-    df[ , ncol(df)] = originalColumn
-    utils::write.table(df, file=outputFilename, quote=FALSE, sep='\t',
-                        col.names = FALSE, row.names = FALSE)
+    source2target(tsvFilePath, columnIndex, outputFilename, "reaction")
 }
 
 ecRow2reaRows <- function(row, columnIndex, ec2rea) {
@@ -245,6 +258,46 @@ ecRow2reaRows <- function(row, columnIndex, ec2rea) {
     rows = do.call("rbind", replicate(length(rea), row, simplify = FALSE))
     return(as.data.frame(cbind(rows, as.vector(rea))))
 }
+
+source2target <- function(tsvFilePath, columnIndex, outputFilename, target) {
+    transomicTable = utils::read.table(tsvFilePath)
+    sourceVec = transomicTable[ , columnIndex]
+    sourceVec = unique(sourceVec)
+    lastIndex = length(sourceVec)
+    if (lastIndex> 100) {
+        s2t = c()
+        for (i in 1:round(lastIndex/100)) {
+            tmp = KEGGREST::keggLink(target, sourceVec[1:100*i])
+            s2t = c(s2t, tmp)
+        }
+        tmp = KEGGREST::keggLink(target,
+                            sourceVec[100*round(lastIndex/100)+1:lastIndex])
+        s2t = c(s2t, tmp)
+    } else {
+        s2t = KEGGREST::keggLink(target, sourceVec)
+    }
+    dflist = apply(transomicTable, 1, srcRow2tgtRows, columnIndex, s2t)
+    df = dplyr::bind_rows(dflist)
+    df = dplyr::select(df, -one_of("rows"))
+    lastColumn = df[ , ncol(df)]
+    originalColumn = df[ , columnIndex]
+    df[ , columnIndex] = lastColumn
+    df[ , ncol(df)] = originalColumn
+    utils::write.table(unique(df), file = outputFilename, quote = FALSE,
+                sep = '\t', col.names = FALSE, row.names = FALSE)
+}
+
+srcRow2tgtRows <- function(row, columnIndex, s2t) {
+    srcId = row[columnIndex]
+    tgtId = s2t[names(s2t) == srcId]
+    rows = do.call("rbind", replicate(length(tgtId), row, simplify = FALSE))
+    return(as.data.frame(cbind(rows, as.vector(tgtId))))
+}
+
+gene2ec <- function(tsvFilePath, columnIndex, outputFilename) {
+    source2target(tsvFilePath, columnIndex, outputFilename, "ec")
+}
+
 
 ##' Install the Cytoscape Apps the transomics2cytoscape depends
 ##'
