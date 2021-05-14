@@ -1,7 +1,7 @@
 ---
 title: "transomics2cytoscape"
 author: "by Kozo Nishida, Katsuyuki Yugi"
-date: "10 July 2020"
+date: "14 May 2021"
 package: transomics2cytoscape
 output: BiocStyle::html_document
 bibliography: references.bib
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Version Information
 
-**R version**: 4.0.5
+**R version**: 4.1.0
 
 **Bioconductor version**: 3.13
 
@@ -188,11 +188,5 @@ camera angle.)
 
 ![allosteric_result](../man/figures/allosteric_result.png)
 
-
-## Session information {.unnumbered}
-
-```{r sessionInfo, echo=FALSE}
-sessionInfo()
-```
 
 # References
