@@ -1,5 +1,15 @@
+CHANGES IN VERSION 1.1.2
+------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+    
+    o Separation of only one function into two
+    
+    o Introducing new input data formats to the above functions
+
+
 CHANGES IN VERSION 1.0.0
------------------------
+------------------------
 
 SIGNIFICANT USER-VISIBLE CHANGES
     
