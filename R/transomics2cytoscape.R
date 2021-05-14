@@ -196,6 +196,7 @@ createEdge2Edge <- function(et, sourceLayerIndex, sourceTableValue,
             }
         }
     }
+    return(addedEdges)
 }
 
 getEdgeSourceSUID <- function(edgeInfo){
