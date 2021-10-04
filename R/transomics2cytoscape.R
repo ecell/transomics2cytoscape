@@ -31,7 +31,7 @@ create3Dnetwork <- function(networkDataDir, networkLayers,
             Please check that Cytoscape is up and running.")
     })
     installCyApps()
-    layerTable <- utils::read.table(networkLayers)
+    layerTable <- utils::read.table(networkLayers, sep="\t")
     networkSUID = apply(layerTable, 1, importLayer2)
     layerTable <- cbind(layerTable, networkSUID)
     nodetables <- apply(layerTable, 1, getNodeTableWithLayerinfo)
@@ -66,7 +66,7 @@ create3Dnetwork <- function(networkDataDir, networkLayers,
 ##' }
 
 createTransomicEdges <- function(suid, transomicEdges) {
-    transomicTable <- utils::read.table(transomicEdges)
+    transomicTable <- utils::read.table(transomicEdges, sep="\t")
     nt = RCy3::getTableColumns(table = "node", network = suid)
     et = RCy3::getTableColumns(table = "edge", network = suid)
     addedEdges = list()
@@ -261,7 +261,7 @@ ecRow2reaRows <- function(row, columnIndex, ec2rea) {
 }
 
 source2target <- function(tsvFilePath, columnIndex, outputFilename, target) {
-    transomicTable = utils::read.table(tsvFilePath)
+    transomicTable = utils::read.table(tsvFilePath, sep="\t")
     sourceVec = transomicTable[ , columnIndex]
     sourceVec = unique(sourceVec)
     lastIndex = length(sourceVec)
