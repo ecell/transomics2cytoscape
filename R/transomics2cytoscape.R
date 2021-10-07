@@ -179,9 +179,9 @@ createEdge2Edge <- function(et, sourceLayerIndex, sourceTableValue,
                                             !!as.name(targetTableColumnName),
                                             fixed = TRUE))
     if (nrow(sourceEdgeRows) > 0 && nrow(targetEdgeRows) > 0) {
-        sourceEi = RCy3::getEdgeInfo(sourceEdgeRows["SUID"])
+        sourceEi = RCy3::getEdgeInfo(unlist(sourceEdgeRows["SUID"]))
         sourceMidpointNodes = lapply(sourceEi, getMidpointNodeSUID, suid)
-        targetEi = RCy3::getEdgeInfo(targetEdgeRows["SUID"])
+        targetEi = RCy3::getEdgeInfo(unlist(targetEdgeRows["SUID"]))
         targetMidpointNodes = lapply(targetEi, getMidpointNodeSUID, suid)
         for (i in seq_len(length(sourceMidpointNodes))){
             sourceSUID = sourceMidpointNodes[[i]]
