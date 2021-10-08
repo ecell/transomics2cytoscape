@@ -3,7 +3,7 @@ CHANGES IN VERSION 1.2.2
 
 BUG FIX
     
-    o Improved tab delimiter processing, support for RCy3 update.
+    o Improved tab delimiter processing, argument processing for RCy3::getEdgeInfo()
 
 CHANGES IN VERSION 1.2.1
 ------------------------
