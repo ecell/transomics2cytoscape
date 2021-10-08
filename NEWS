@@ -1,3 +1,10 @@
+CHANGES IN VERSION 1.2.2
+------------------------
+
+BUG FIX
+    
+    o Improved tab delimiter processing, support for RCy3 update.
+
 CHANGES IN VERSION 1.2.1
 ------------------------
 
