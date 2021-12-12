@@ -15,7 +15,7 @@
 ##' networkDataDir <- tempfile(); dir.create(networkDataDir)
 ##' networkLayers <- system.file("extdata", "yugi2014.tsv",
 ##'     package = "transomics2cytoscape")
-##' stylexml <- system.file("extdata", "transomics.xml",
+##' stylexml <- system.file("extdata", "yugi2014styles.xml",
 ##'     package = "transomics2cytoscape")
 ##' suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
 ##' }
