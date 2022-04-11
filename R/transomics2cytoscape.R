@@ -322,11 +322,11 @@ createMidnodes <- function(networkSUID){
     mid2tgt = dplyr::rename(mid2tgt, source = SUID)
     mid2tgt = mid2tgt %>% purrr::transpose()
     res = RCy3::cyrestPOST(paste("networks", networkSUID, "edges", sep = "/"),
-               body=src2mid, base.url = RCy3:::.defaultBaseUrl)
+            body=src2mid, base.url = RCy3:::.defaultBaseUrl)
     #res = dplyr::bind_rows(res)
     #res = dplyr::bind_cols(res['SUID'], midNodeInfo)
     res = RCy3::cyrestPOST(paste("networks", networkSUID, "edges", sep = "/"),
-               body=mid2tgt, base.url = RCy3:::.defaultBaseUrl)
+            body=mid2tgt, base.url = RCy3:::.defaultBaseUrl)
     #message("creating edges for midpoionts...")
     #saveRDS(edgelist, file = "midpoint_edgesrctgt.rds")
     #RCy3::addCyEdges(edgelist)
