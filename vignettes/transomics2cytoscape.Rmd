@@ -54,7 +54,7 @@ Cytoscape Automation [@otasek_cytoscape_2019].
 This package requires [Cytoscape](https://cytoscape.org/) to be installed and
 you need to run Cytoscape before running the following R code.
 
-```{r}
+```
 BiocManager::install("transomics2cytoscape")
 ```
 
