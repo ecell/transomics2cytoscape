@@ -176,19 +176,21 @@ This code execution will take some time to complete.
 # Sys.setenv(LANGUAGE="en_US.UTF-8") 
 library(transomics2cytoscape)
 networkDataDir <- tempfile(); dir.create(networkDataDir)
-networkLayers <- system.file("extdata", "yugi2014.tsv",
-    package = "transomics2cytoscape")
-stylexml <- system.file("extdata", "yugi2014styles.xml",
-    package = "transomics2cytoscape")
+
+networkLayers <- system.file("extdata/usecase1", "yugi2014.tsv",
+                            package = "transomics2cytoscape")
+stylexml <- system.file("extdata/usecase1", "yugi2014.xml",
+                            package = "transomics2cytoscape")
 suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
 
-layer1to2 <- system.file("extdata", "kinase2enzyme_gene2rea.tsv",
-    package = "transomics2cytoscape")
+layer1to2 <- system.file("extdata/usecase1", "k2e.tsv",
+                            package = "transomics2cytoscape")
 suid <- createTransomicEdges(suid, layer1to2)
 
-layer2to3 <- system.file("extdata", "allosteric.tsv",
-    package = "transomics2cytoscape")
-suid <- createTransomicEdges(suid, layer2to3)
+layer3to2 <- system.file("extdata/usecase1", "allosteric_ecnumber.tsv",
+                            package = "transomics2cytoscape")
+ec2reaction(layer3to2, 6, "allosteric_ec2rea.tsv")
+suid <- createTransomicEdges(suid, "allosteric_ec2rea.tsv")
 ```
 
 Then, you should have a 3D view with layered networks and transomic
@@ -220,5 +222,40 @@ ecnum <- system.file("extdata", "allosteric_ecnumber.tsv",
 ec2reaction(ecnum, 8, "allosteric.tsv")
 ```
 
+
+```{r}
+networkDataDir <- tempfile(); dir.create(networkDataDir)
+tfs <- system.file("extdata/usecase2", "TFs.sif",
+                            package = "transomics2cytoscape")
+file.copy(tfs, networkDataDir)
+networkLayers <- system.file("extdata/usecase2", "kokaji2020.tsv",
+                            package = "transomics2cytoscape")
+stylexml <- system.file("extdata/usecase2", "Kokaji2020styles.xml",
+                            package = "transomics2cytoscape")
+suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
+
+layer1to2 <- system.file("extdata/usecase2", "s2t_name_updated.tsv",
+                            package = "transomics2cytoscape")
+suid <- createTransomicEdges(suid, layer1to2)
+
+layer2to3 <- system.file("extdata/usecase2", "t2e_name_updated.tsv",
+                            package = "transomics2cytoscape")
+suid <- createTransomicEdges(suid, layer2to3)
+
+layer3to4 <- system.file("extdata/usecase2", "e2r_updated.tsv",
+                            package = "transomics2cytoscape")
+ec2reaction(layer3to4, 6, "e2r_updated_ec2rea.tsv")
+suid <- createTransomicEdges(suid, "e2r_updated_ec2rea.tsv")
+
+layer5to4 <- system.file("extdata/usecase2", "m2r_updated.tsv",
+                            package = "transomics2cytoscape")
+ec2reaction(layer5to4, 6, "m2r_updated_ec2rea.tsv")
+suid <- createTransomicEdges(suid, "m2r_updated_ec2rea.tsv")
+```
+
+
+```{r}
+sessionInfo()
+```
 
 # References
