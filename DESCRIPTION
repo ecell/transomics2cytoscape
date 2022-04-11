@@ -26,4 +26,4 @@ LazyData: false
 biocViews: Network, Software, Pathways, DataImport, KEGG
 VignetteBuilder: knitr
 SystemRequirements: Java 11, Cytoscape 3.8.2, Cy3D >= 1.1.3
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

@@ -9,10 +9,17 @@ createTransomicEdges(suid, transomicEdges)
 \arguments{
 \item{suid}{A SUID of Cytoscape network}
 
-\item{transomicEdges}{Path of a TSV file with the 9 columns
-(layer index of a source node,
+\item{transomicEdges}{Path of a TSV file with the 7 columns
+(layer index of the source node,
+the column name for which you want to find the attribute value of the
+source node,
+the attribute value of the source node should have,
+layer index of a target node
 name or KEGG object ID that the source node should have,
-layer index of a target node,
+layer index of the target node,
+the column name for which you want to find the attribute value of the
+target node,
+the attribute value of the target node should have,
 name or KEGG object ID that the target node should have,
 interaction type).}
 }
@@ -24,9 +31,9 @@ Create Trans-Omic edges between layers of the network
 }
 \examples{
 \dontrun{
-transomicEdges <- system.file("extdata", "allosteric.tsv",
+layer1to2 <- system.file("extdata/usecase1", "k2e.tsv",
     package = "transomics2cytoscape")
-createTransomicEdges(suid, transomicEdges)
+suid <- createTransomicEdges(suid, layer1to2)
 }
 }
 \author{
