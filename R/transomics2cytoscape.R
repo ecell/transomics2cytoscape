@@ -4,8 +4,10 @@
 ##' @title Create 3D network view for transomics visualization.
 ##' @param networkDataDir Path of a directory to put the network files
 ##' of the second column of networkLayers TSV.
-##' @param networkLayers Path of a TSV file with the 3 columns (layer index,
-##' the network file name in networkDataDir, Z-height of the network).
+##' @param networkLayers Path of a TSV file with the 4 columns (layer index,
+##' the network file name in networkDataDir, Z-height of the network,
+##' whether to interact not only with the nodes of each network layer but also
+##' with the edges).
 ##' @param stylexml Path of a XML file for Cytoscape style
 ##' @return A SUID of the 3D network.
 ##' @author Kozo Nishida
@@ -13,9 +15,9 @@
 ##' @export
 ##' @examples \dontrun{
 ##' networkDataDir <- tempfile(); dir.create(networkDataDir)
-##' networkLayers <- system.file("extdata", "yugi2014.tsv",
+##' networkLayers <- system.file("extdata/usecase1", "yugi2014.tsv",
 ##'     package = "transomics2cytoscape")
-##' stylexml <- system.file("extdata", "yugi2014styles.xml",
+##' stylexml <- system.file("extdata/usecase1", "yugi2014.xml",
 ##'     package = "transomics2cytoscape")
 ##' suid <- create3Dnetwork(networkDataDir, networkLayers, stylexml)
 ##' }
