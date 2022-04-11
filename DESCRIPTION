@@ -22,7 +22,7 @@ License: Artistic-2.0
 Imports: RCy3, KEGGREST, dplyr, purrr
 Suggests: testthat, roxygen2, knitr, BiocStyle, rmarkdown
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 biocViews: Network, Software, Pathways, DataImport, KEGG
 VignetteBuilder: knitr
 SystemRequirements: Java 11, Cytoscape 3.8.2, Cy3D >= 1.1.3
