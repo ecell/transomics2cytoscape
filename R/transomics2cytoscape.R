@@ -156,25 +156,21 @@ createNode2Node <- function(nt, sourceLayerIndex, sourceTableValue,
     return(edgetbl)
 }
 
-##' Convert KEGG enzyme IDs to KEGG reaction IDs
+##' Convert a EC number column to a KEGG reaction ID column
 ##'
 ##' @title Convert KEGG enzyme IDs to KEGG reaction IDs.
-##' @param tsvFilePath Path of a TSV file with the 9 columns
-##' (layer index of a source node,
-##' name or KEGG object ID that the source node should have,
-##' layer index of a target node,
-##' name or KEGG object ID that the target node should have,
-##' interaction type).
-##' @param columnIndex The column number
-##' @param outputFilename The output filename
+##' @param tsvFilePath Path of a TSV file with column of EC number
+##' @param columnIndex Index number of the column with the EC number you want
+##' to convert
+##' @param outputFilename The output file name
 ##' @return None
 ##' @author Kozo Nishida
 ##' @import dplyr
 ##' @export
 ##' @examples \dontrun{
-##' ec = system.file("extdata", "allosteric_ecnumber.tsv",
+##' layer3to2 <- system.file("extdata/usecase1", "allosteric_ecnumber.tsv",
 ##'     package = "transomics2cytoscape")
-##' ec2reaction(ec, 8, "allosteric.tsv")
+##' ec2reaction(layer3to2, 6, "allosteric_ec2rea.tsv")
 ##' }
 
 ec2reaction <- function(tsvFilePath, columnIndex, outputFilename) {
