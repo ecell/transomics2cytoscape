@@ -7,28 +7,24 @@
 ec2reaction(tsvFilePath, columnIndex, outputFilename)
 }
 \arguments{
-\item{tsvFilePath}{Path of a TSV file with the 9 columns
-(layer index of a source node,
-name or KEGG object ID that the source node should have,
-layer index of a target node,
-name or KEGG object ID that the target node should have,
-interaction type).}
+\item{tsvFilePath}{Path of a TSV file with column of EC number}
 
-\item{columnIndex}{The column number}
+\item{columnIndex}{Index number of the column with the EC number you want
+to convert}
 
-\item{outputFilename}{The output filename}
+\item{outputFilename}{The output file name}
 }
 \value{
 None
 }
 \description{
-Convert KEGG enzyme IDs to KEGG reaction IDs
+Convert a EC number column to a KEGG reaction ID column
 }
 \examples{
 \dontrun{
-ec = system.file("extdata", "allosteric_ecnumber.tsv",
+layer3to2 <- system.file("extdata/usecase1", "allosteric_ecnumber.tsv",
     package = "transomics2cytoscape")
-ec2reaction(ec, 8, "allosteric.tsv")
+ec2reaction(layer3to2, 6, "allosteric_ec2rea.tsv")
 }
 }
 \author{

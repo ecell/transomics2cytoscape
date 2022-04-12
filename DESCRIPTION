@@ -1,6 +1,6 @@
 Package: transomics2cytoscape
 Title: A tool set for 3D Trans-Omic network visualization with Cytoscape
-Version: 1.3.1
+Version: 1.4.0
 Authors@R: c(
     person ("Kozo", "Nishida", email = "kozo.nishida@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8501-7319")),
@@ -19,11 +19,11 @@ Description: transomics2cytoscape generates a file for 3D transomics
     using Cytoscape automation
     (https://doi.org/10.1186/s13059-019-1758-4).
 License: Artistic-2.0
-Imports: RCy3, KEGGREST, dplyr
+Imports: RCy3, KEGGREST, dplyr, purrr
 Suggests: testthat, roxygen2, knitr, BiocStyle, rmarkdown
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 biocViews: Network, Software, Pathways, DataImport, KEGG
 VignetteBuilder: knitr
 SystemRequirements: Java 11, Cytoscape 3.8.2, Cy3D >= 1.1.3
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
