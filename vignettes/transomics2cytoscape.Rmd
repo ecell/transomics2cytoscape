@@ -203,7 +203,7 @@ interactions between them.
 (Note that you need to perform operations such as zooming out or adjusting the
 camera angle.)
 
-![Figure 3. Reproduction of Yugi's Trans-omics visualizaion (Yugi 2014)](../man/figures/yugi2014.png)
+![Figure 3. Reproduction of Yugi's transomics visualizaion (Yugi 2014)](../man/figures/yugi2014.png)
 
 # Conversion from EC number to KEGG reaction ID
 
@@ -270,6 +270,8 @@ layer5to4 <- system.file("extdata/usecase2", "m2r_updated.tsv",
 ec2reaction(layer5to4, 6, "m2r_updated_ec2rea.tsv")
 suid <- createTransomicEdges(suid, "m2r_updated_ec2rea.tsv")
 ```
+
+![Figure 5. Reproduction of Kokaji's transomics visualizaion (Kokaji 2020)](../man/figures/kokaji2020.png)
 
 
 ```{r}
