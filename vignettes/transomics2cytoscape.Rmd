@@ -60,8 +60,8 @@ BiocManager::install("transomics2cytoscape")
 
 # Workflow
 
-There is 2 functions `create3Dnetwork` and `createTransomicEdges`
-in transomics2cytoscape.
+transomics2cytoscape has 2 main functions
+`create3Dnetwork` and `createTransomicEdges`
 Below is a diagram of the transomics2cytoscape workflow.
 
 ![Figure 1. The transomics2cytoscape workflow](../man/figures/workflow_diagram.png)
@@ -94,7 +94,7 @@ suid <- createTransomicEdges(suid, layer1to2)
 
 ### (Any number of) network files to be layered in 3D space
 
-Files that Cytoscape can import.
+transomics2cytoscape can layer all the networks that Cytoscape can import.
 You need to put these files in the directory of the 1st argument of
 `create3Dnetwork`.
 You don't need to put files for the KEGG pathway.
@@ -110,9 +110,9 @@ A file that defines network layer index and the Z-height of the network
 in 3D space. The format is as follows.
 
 ```
-layer1  rno04910    2400
-layer2  rno01100    1500
-layer3  rno01100    1
+layer1  rno04910    2400    false
+layer2  rno01100    1500    true
+layer3  rno01100    1    false
 ```
 
 The 1st column is the network layer index.
@@ -122,7 +122,18 @@ The 2nd column is the KEGG pathway ID or the network file name in the directory
 of the 1st argument of `create3Dnetwork`.
 You don't need to prepare a network file for the KEGG pathway.
 You can import the KEGG pathway simply by writing the KEGG pathway ID.
-The last column is the Z-height of the network.
+
+The 3rd column is the Z-height of the network.
+
+The fourth column specifies whether you want to connect the interaction
+to the "edge" of the network in that row.
+If this is true, transomics2cytoscape will create a node at the midpoint of all
+edges of the network.
+This is useful when you want to represent an interaction that activates and
+inactivates a reaction in the network.
+For example, KEGG global metabolic pathway network does not have an enzyme node,
+unlike a normal metabolic pathway.
+This column should be set to "true" in such cases.
 
 ### A style file of Cytoscape
 
@@ -130,7 +141,6 @@ A Cytoscape style file.
 For more information about Cytoscape style file, see the
 [Cytoscape user manual](http://manual.cytoscape.org/en/stable/Styles.html).
 Note that you can only use style properties that are supported by Cy3D.
-
 
 ### Trans-omic interaction file
 
@@ -140,25 +150,20 @@ The format is as follows.
 
 ![Figure 2. Trans-omic interaction file](../man/figures/Transomic_interaction_file.png)
 
-The 1st ~ 4th columns are the information about the node or edge 
-at the "source" of the Trans-omic interaction.
+The 1st ~ 3rd columns are the information about the node at the "source" of the
+transomic interaction.
 
-The 5th ~ 8th columns are about the target node.
+The 4th ~ 6th columns are about the target node.
 
-The 1st and 5th columns are the network layer index.
+The 1st and 4th columns are the network layer index of the source/target node.
 
-The 2nd and 6th columns are whether the source and target of the interaction
-are node or edge.
+The 2nd and 5th columns are the column names for which you want to find the
+attribute value of the source/target node.
 
-The 3rd and 7th columns are the column name of the Cytoscape node or edge
-table.
+The 3rd and 6th columns are the attribute values of the source/target node
+should have.
 
-The 4th and 8th columns are the string to be searched from the column
-with the name of the 3rd and 7th column.
-The Cytoscape node or edge that has the string will be the source or target
-of the Trans-omic interaction.
-
-The last column is the type of the Trans-omic interaction.
+The last column is the type of the transomic interaction.
 This information is added to the `interaction` column of the edge table.
 
 ## Example
@@ -222,6 +227,19 @@ ecnum <- system.file("extdata", "allosteric_ecnumber.tsv",
 ec2reaction(ecnum, 8, "allosteric.tsv")
 ```
 
+## Example (with more network layers)
+
+transomics2cytoscape can visualize more layers than in the previous example.
+
+You can reproduce a visualiztion of
+[Kokaji 2020](https://doi.org/10.1126/scisignal.aaz1236)
+with the code below.
+(Unfortunately, this paper is not open access and I can't give you the details.)
+
+This code execution will take more time to complete then the previous example.
+However, this visualization shows that transomics2cytoscape can also visualize
+network not only with the previous 3 layers but also with the 5 layers
+(and more than that).
 
 ```{r}
 networkDataDir <- tempfile(); dir.create(networkDataDir)
