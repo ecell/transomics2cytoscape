@@ -19,7 +19,12 @@ Description: transomics2cytoscape generates a file for 3D transomics
     using Cytoscape automation
     (https://doi.org/10.1186/s13059-019-1758-4).
 License: Artistic-2.0
-Imports: RCy3, KEGGREST, dplyr, purrr
+Imports: 
+    RCy3,
+    KEGGREST,
+    dplyr,
+    purrr,
+    tibble
 Suggests: testthat, roxygen2, knitr, BiocStyle, rmarkdown
 Encoding: UTF-8
 LazyData: false

@@ -210,7 +210,7 @@ camera angle.)
 For those who have seen the enzyme reaction database such as
 [BRENDA](https://www.brenda-enzymes.org/) [@chang_brenda_2021],
 it is not intuitive that the ID of the allosteric regulatory target
-(8th column of the `allosteric.tsv`)
+(6th column of the `allosteric_ecnumber.tsv`)
 is the ID of the metabolic reaction rather than the EC number.
 
 This is because KEGG uses the reaction ID instead of the EC number as the ID of
@@ -224,7 +224,7 @@ column of the Trans-omic interaction file into the KEGG reaction ID.
 ```{r}
 ecnum <- system.file("extdata", "allosteric_ecnumber.tsv",
     package = "transomics2cytoscape")
-ec2reaction(ecnum, 8, "allosteric.tsv")
+ec2reaction(ecnum, 6, "allosteric_ec2rea.tsv")
 ```
 
 ## Example (with more network layers)
