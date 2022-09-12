@@ -39,14 +39,11 @@ create3Dnetwork <- function(networkDataDir, networkLayers,
     nodetables <- apply(layerTable, 1, getNodeTableWithLayerinfo)
     layeredNodes <- getLayeredNodes(nodetables)
     edgetables <- apply(layerTable, 1, getEdgeTableWithLayerinfo)
-    message("I'm in checkpoint 1 ...")
     layeredEdges <- getLayeredEdges(edgetables)
-    message("I'm in checkpoint 2 ...")
-    return(c(layeredNodes, layeredEdges))
-    #RCy3::commandsPOST('cy3d set renderer')
-    #suID <- RCy3::createNetworkFromDataFrames(layeredNodes, layeredEdges)
-    #setTransomicStyle(stylexml, suID)
-    #return(suID)
+    RCy3::commandsPOST('cy3d set renderer')
+    suID <- RCy3::createNetworkFromDataFrames(layeredNodes, layeredEdges)
+    setTransomicStyle(stylexml, suID)
+    return(suID)
 }
 
 ##' Create Trans-Omic edges between layers of the network
