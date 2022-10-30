@@ -1,7 +1,7 @@
 ---
 title: "Introduction to the transomics2cytoscape package"
 author: "by Kozo Nishida, Katsuyuki Yugi"
-date: "26 Apr 2022"
+date: "26 Oct 2022"
 package: transomics2cytoscape
 output: BiocStyle::html_document
 bibliography: references.bib
@@ -20,9 +20,9 @@ knitr::opts_chunk$set(
 
 # Version Information
 
-**R version**: 4.2.0
+**R version**: 4.2.1
 
-**Bioconductor version**: 3.15
+**Bioconductor version**: 3.16
 
 **Cytoscape**: 3.9.1
 
@@ -110,9 +110,9 @@ A file that defines network layer index and the Z-height of the network
 in 3D space. The format is as follows.
 
 ```
-layer1  rno04910    2400    false
-layer2  rno01100    1500    true
-layer3  rno01100    1    false
+kinase-layer	rno04910	1500	false
+enzyme-layer	rno01100	900	true
+metabolite-layer	rno01100	1	false
 ```
 
 The 1st column is the network layer index.
