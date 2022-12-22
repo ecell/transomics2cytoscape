@@ -1,7 +1,7 @@
 ---
 title: "Introduction to the transomics2cytoscape package"
 author: "by Kozo Nishida, Katsuyuki Yugi"
-date: "26 Oct 2022"
+date: "22 Dec 2022"
 package: transomics2cytoscape
 output: BiocStyle::html_document
 bibliography: references.bib
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 # Version Information
 
-**R version**: 4.2.1
+**R version**: 4.2.2
 
 **Bioconductor version**: 3.16
 
