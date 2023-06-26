@@ -25,7 +25,7 @@ Imports:
     dplyr,
     purrr,
     tibble,
-    progress
+    pbapply
 Suggests: testthat, roxygen2, knitr, BiocStyle, rmarkdown
 Encoding: UTF-8
 LazyData: false
