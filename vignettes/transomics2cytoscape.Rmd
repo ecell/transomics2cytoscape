@@ -1,7 +1,7 @@
 ---
 title: "Introduction to the transomics2cytoscape package"
 author: "by Kozo Nishida, Katsuyuki Yugi"
-date: "22 Dec 2022"
+date: "10 Jul 2023"
 package: transomics2cytoscape
 output: BiocStyle::html_document
 bibliography: references.bib
