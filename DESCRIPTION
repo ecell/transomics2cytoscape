@@ -24,7 +24,8 @@ Imports:
     KEGGREST,
     dplyr,
     purrr,
-    tibble
+    tibble,
+    pbapply
 Suggests: testthat, roxygen2, knitr, BiocStyle, rmarkdown
 Encoding: UTF-8
 LazyData: false

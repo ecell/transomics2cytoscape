@@ -287,6 +287,16 @@ importLayer <- function(row){
     }
 }
 
+myGetEdgeInfo <- function(edges, network){
+    ret <- pbapply::pblapply(edges, function(x){
+        res <- RCy3::cyrestGET(paste("networks", network,
+                                     "edges", x, sep = "/"))
+        res[["data"]]
+    })
+    names(ret) <- edges
+    return(ret)
+}
+
 createMidnodes <- function(networkSUID){
     #nt = RCy3::getTableColumns(table = 'node', network = networkSUID)
     et = RCy3::getTableColumns(table = 'edge', network = networkSUID)
@@ -296,7 +306,7 @@ createMidnodes <- function(networkSUID){
     xyloc = RCy3::getTableColumns(table = 'node',
         columns = c('SUID', 'x_location', 'y_location'), network = networkSUID)
     message("getting edge information...")
-    einfo = RCy3::getEdgeInfo(unlist(et[['SUID']]), network = networkSUID)
+    einfo = myGetEdgeInfo(unlist(et[['SUID']]), network = networkSUID)
     einfodf = dplyr::bind_rows(einfo)
     midxydf = dplyr::bind_rows(lapply(einfo, getMidLoc, xyloc))
     midNodeInfo = dplyr::bind_cols(einfodf, midxydf)
@@ -380,7 +390,7 @@ getNodeTableWithLayerinfo <- function(row){
 getEdgeTableWithLayerinfo <- function(row){
     et = RCy3::getTableColumns(table = "edge", network = as.numeric(row[5]))
     message("Getting edge info. This function is kinda slow...")
-    ei = RCy3::getEdgeInfo(et$SUID, as.numeric(row[5]))
+    ei = myGetEdgeInfo(et$SUID, as.numeric(row[5]))
     message("Finished getting edge info.")
     et["source"] = unlist(lapply(ei, function(x) x$source))
     et["target"] = unlist(lapply(ei, function(x) x$target))
