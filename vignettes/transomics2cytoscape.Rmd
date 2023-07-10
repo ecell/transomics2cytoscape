@@ -20,11 +20,11 @@ knitr::opts_chunk$set(
 
 # Version Information
 
-**R version**: 4.2.2
+**R version**: 4.3.1
 
-**Bioconductor version**: 3.16
+**Bioconductor version**: 3.17 (RCy3: 2.20.0)
 
-**Cytoscape**: 3.9.1
+**Cytoscape**: 3.10.0
 
 **Cy3D (Cytoscape app)**: 1.1.3
 
@@ -171,8 +171,10 @@ This information is added to the `interaction` column of the edge table.
 You can reproduce Figure5 of
 [Yugi 2014](https://www.cell.com/cell-reports/references/S2211-1247(14)00590-7)
 with the code below.
-This code execution will take some time to complete.
-(Do not operate Cytoscape until the code execution is completed.)
+
+The execution of this code took 3 minutes to complete on my Windows 11 Desktop PC [12th Gen Intel Core i7-12700 2.10 GHz, 128 GB RAM, and Nvidia GeForce RTX 4070].
+
+(Note: Do not operate Cytoscape until the code execution is completed.)
 
 ```{r setup}
 # suppressPackageStartupMessages(library(dplyr))
@@ -236,8 +238,11 @@ You can reproduce a visualiztion of
 with the code below.
 (Unfortunately, this paper is not open access and I can't give you the details.)
 
-This code execution will take more time to complete then the previous example.
-However, this visualization shows that transomics2cytoscape can also visualize
+The execution of this code took 5 minutes to complete on my Windows 11 Desktop PC [12th Gen Intel Core i7-12700 2.10 GHz, 128 GB RAM, and Nvidia GeForce RTX 4070].
+
+(Note: Do not operate Cytoscape until the code execution is completed.)
+
+This visualization shows that transomics2cytoscape can also visualize
 network not only with the previous 3 layers but also with the 5 layers
 (and more than that).
 
