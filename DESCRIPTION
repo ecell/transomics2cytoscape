@@ -1,6 +1,6 @@
 Package: transomics2cytoscape
 Title: A tool set for 3D Trans-Omic network visualization with Cytoscape
-Version: 1.8.0
+Version: 1.11.0
 Authors@R: c(
     person ("Kozo", "Nishida", email = "kozo.nishida@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8501-7319")),
@@ -31,5 +31,5 @@ Encoding: UTF-8
 LazyData: false
 biocViews: Network, Software, Pathways, DataImport, KEGG
 VignetteBuilder: knitr
-SystemRequirements: Cytoscape >= 3.9.1
+SystemRequirements: Cytoscape >= 3.10.0
 RoxygenNote: 7.1.2
