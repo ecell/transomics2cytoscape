@@ -2,6 +2,10 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8201898.svg)](https://doi.org/10.5281/zenodo.8201898)
 
+[![BioC Release Build Status](http://bioconductor.org/shields/build/release/bioc/transomics2cytoscape.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/transomics2cytoscape/) - Bioconductor Release Build
+
+[![BioC Dev Build Status](http://bioconductor.org/shields/build/devel/bioc/transomics2cytoscape.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/transomics2cytoscape/) - Bioconductor Dev Build
+
 ## Introduction
 
 Visualization of trans-omic networks helps biological interpretation by
