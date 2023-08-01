@@ -1,5 +1,7 @@
 # transomics2cytoscape
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8201898.svg)](https://doi.org/10.5281/zenodo.8201898)
+
 ## Introduction
 
 Visualization of trans-omic networks helps biological interpretation by
