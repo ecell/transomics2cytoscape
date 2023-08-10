@@ -172,7 +172,7 @@ You can reproduce Figure5 of
 [Yugi 2014](https://www.cell.com/cell-reports/references/S2211-1247(14)00590-7)
 with the code below.
 
-The execution of this code took 3 minutes to complete on our Windows 11 Desktop PC [12th Gen Intel Core i7-12700 2.10 GHz, 128 GB RAM, and Nvidia GeForce RTX 4070].
+The execution of this code took 3 minutes to complete on a Windows 11 Desktop PC [12th Gen Intel Core i7-12700 2.10 GHz, 128 GB RAM, and Nvidia GeForce RTX 4070].
 
 (Note: Do not operate Cytoscape until the code execution is completed.)
 
@@ -238,7 +238,7 @@ You can reproduce a visualiztion of
 with the code below.
 (Unfortunately, this paper is not open access and I can't give you the details.)
 
-The execution of this code took 5 minutes to complete on our Windows 11 Desktop PC [12th Gen Intel Core i7-12700 2.10 GHz, 128 GB RAM, and Nvidia GeForce RTX 4070].
+The execution of this code took 5 minutes to complete on a Windows 11 Desktop PC [12th Gen Intel Core i7-12700 2.10 GHz, 128 GB RAM, and Nvidia GeForce RTX 4070].
 
 (Note: Do not operate Cytoscape until the code execution is completed.)
 
