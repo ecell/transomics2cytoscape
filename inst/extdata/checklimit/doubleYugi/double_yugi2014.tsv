@@ -1,0 +1,6 @@
+kinase-layer2	rno04910	3500	false
+enzyme-layer2	rno01100	2900	true
+metabolite-layer2	rno01100	2001	false
+kinase-layer	rno04910	1500	false
+enzyme-layer	rno01100	900	true
+metabolite-layer	rno01100	1	false
