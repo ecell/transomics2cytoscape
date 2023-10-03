@@ -1,0 +1,52 @@
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=07s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=07s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=07s  
+Finished getting edge info.
+Getting edge info. This function is kinda slow...
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s  
+Finished getting edge info.
+Loading data...
+
+Applying default style...
+
+Applying preferred layout...
+
+Set visual style to yugi2014
+> layer1to2 <- "k2e_sixfold.tsv"
+> layer3to2 <- "sixfold_allosteric_ec2rea.tsv"
+> file.copy(layer1to2, networkDataDir)
+[1] TRUE
+> file.copy(layer3to2, networkDataDir)
+[1] TRUE
+> suid <- createTransomicEdges(suid, layer1to2)
+> suid <- createTransomicEdges(suid, layer3to2)
+> 
+> end.time <- Sys.time()
+> time.taken <- end.time - start.time
+> print(time.taken)
+Time difference of 20.75855 mins
+> 
